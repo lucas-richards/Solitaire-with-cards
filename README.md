@@ -3,6 +3,11 @@
 ## Overview
 Solitaire goes back to my childhood vacations, those rainy days at the beach house. This game simulates a solitaire with cards from the comfort of your home.
 
+## Technologies
+- HTML
+- CSS
+- JavaScript
+
 ### User Stories
 
 MVP - Minimum Viable Product
@@ -38,15 +43,14 @@ As a user, I want to be able to...
 - classic cards
 
 
-
 ## UI WireFrame
 <!-- add an image to the readme -->
 ![layout wireframe](css/imgs/game1.png)
 ![layout wireframe](css/imgs/game2.png)
 ![layout wireframe](css/imgs/game3.png)
 
-I want the user to...
-- see seven piles of cards:
+
+- starts with seven piles of cards:
     - pile1: 1 card facing up
     - pile2: 1 card facing down and 1 facing up
     - pile3: 2 cards facing down and 1 facing up
@@ -55,6 +59,4 @@ I want the user to...
     - pile6: 5 cards facing down and 1 facing up
     - pile7: 6 cards facing down and 1 facing up
     - pile8: Main deck rest of the cards (52 - 26 = 24)
-- see all the cards that are facing up
-- see four empty spaces for the foundation piles
-- see the next card of the stack when I remove the top one
+- see the next card of the stack when I remove the one on top
