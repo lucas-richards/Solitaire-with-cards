@@ -1,4 +1,5 @@
 body {
+    font-family: 'Abril Fatface', cursive;;
     background-image: url("imgs/wood table background.png");
     color: white;
 }
@@ -49,6 +50,24 @@ body {
 button {
     float: right;
     margin-top: -50px;
+}
+
+.i-msg-cont,.f-msg-cont {
+    display: flex;
+    justify-content: center;
+}
+
+#inv-msg {
+    text-align: center;
+    border: solid white;
+    width: 500px;
+    visibility:hidden;
+}
+
+#final-msg {
+    font-size: 56px;
+    margin-top: -200px;
+    visibility:hidden;
 }
 
 

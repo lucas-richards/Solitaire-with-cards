@@ -24,16 +24,19 @@ As a user, I want to be able to...
 - stack cards by dragging and dropping. 
     - A card can only be stacked on a card that is a different color and one number higher
     - A stack of cards can only be stacked on a card that is a different color and one number higher to the bottom card of the pile.
+- display a message for invalid moves
 - drag and drop a king into an empty space 
 - win once all cards are stacked in order and in four different stack of cards. The king must be the last one.
-- loose when timer hits zero (30 minutes)
+- loose when when you give up
 - reset any time I want
 - play again after the game is over
 
 
 **Bonus User Stories**
 (These features would be nice to have if I have time to build them)
+- drag and drop feature
 - loose if it is impossible to make any other move
+- choose what do you want to drink while playing
 - Option to choose an easy game (1 card) or hard game (3 cards) 
 - timer
 - keep track of how many moves the player made in previous games
