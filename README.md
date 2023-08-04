@@ -3,6 +3,10 @@
 ## Overview
 Solitaire goes back to my childhood vacations, those rainy days at the beach house. This game simulates a solitaire with cards from the comfort of your home.
 
+## Getting Started
+
+here goes the link to the game
+
 ## Technologies
 - HTML
 - CSS

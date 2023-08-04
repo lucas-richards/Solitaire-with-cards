@@ -3,13 +3,52 @@ body {
     color: white;
 }
 
-#found-pile {
-    margin-left: 350px;
-    width: 450px;
+#t-piles {
+    border: solid red;
+    display: flex;
+    justify-content: end;
 }
 
-#middle-pile {
-    margin-left: 59px;
-    margin-top: 150px;
-    width: 680px;
+#m-piles {
+    border: solid red;
+    display:flex;
+    justify-content: end;
 }
+
+#pile1, 
+#pile2,
+#pile3,
+#pile4,
+#pile5,
+#pile6,
+#pile7
+    {
+    border: solid red;
+    display: flex;
+    flex-direction: column;
+}
+
+#pile1 > div:not(:first-child),
+#pile2 > div:not(:first-child),
+#pile3 > div:not(:first-child),
+#pile4 > div:not(:first-child),
+#pile5 > div:not(:first-child),
+#pile6 > div:not(:first-child),
+#pile7 > div:not(:first-child){
+    margin-top: -100px;
+}
+
+#b-piles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    border: solid red;
+}
+
+button {
+    float: right;
+    margin-top: -50px;
+}
+
+
