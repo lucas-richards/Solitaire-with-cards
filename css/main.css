@@ -1,0 +1,15 @@
+body {
+    background-image: url("imgs/wood table background.png");
+    color: white;
+}
+
+#found-pile {
+    margin-left: 350px;
+    width: 450px;
+}
+
+#middle-pile {
+    margin-left: 59px;
+    margin-top: 150px;
+    width: 680px;
+}
