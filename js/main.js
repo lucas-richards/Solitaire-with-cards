@@ -7,53 +7,53 @@ const deck = [
 {name:'hQ', click:false, flip:false},
 {name:'hJ', click:false, flip:false},
 {name:'h10', click:false, flip:false},
-{name:'h9', click:false, flip:false},
-{name:'h8', click:false, flip:false},
-{name:'h7', click:false, flip:false},
-{name:'h6', click:false, flip:false},
-{name:'h5', click:false, flip:false},
-{name:'h4', click:false, flip:false},
-{name:'h3', click:false, flip:false},
-{name:'h2', click:false, flip:false},
+{name:'h09', click:false, flip:false},
+{name:'h08', click:false, flip:false},
+{name:'h07', click:false, flip:false},
+{name:'h06', click:false, flip:false},
+{name:'h05', click:false, flip:false},
+{name:'h04', click:false, flip:false},
+{name:'h03', click:false, flip:false},
+{name:'h02', click:false, flip:false},
 {name:'hA', click:false, flip:false},
 {name:'dK', click:false, flip:false},
 {name:'dQ', click:false, flip:false},
 {name:'dJ', click:false, flip:false},
 {name:'d10', click:false, flip:false},
-{name:'d9', click:false, flip:false},
-{name:'d8', click:false, flip:false},
-{name:'d7', click:false, flip:false},
-{name:'d6', click:false, flip:false},
-{name:'d5', click:false, flip:false},
-{name:'d4', click:false, flip:false},
-{name:'d3', click:false, flip:false},
-{name:'d2', click:false, flip:false},
+{name:'d09', click:false, flip:false},
+{name:'d08', click:false, flip:false},
+{name:'d07', click:false, flip:false},
+{name:'d06', click:false, flip:false},
+{name:'d05', click:false, flip:false},
+{name:'d04', click:false, flip:false},
+{name:'d03', click:false, flip:false},
+{name:'d02', click:false, flip:false},
 {name:'dA', click:false, flip:false},
 {name:'sK', click:false, flip:false},
 {name:'sQ', click:false, flip:false},
 {name:'sJ', click:false, flip:false},
 {name:'s10', click:false, flip:false},
-{name:'s9', click:false, flip:false},
-{name:'s8', click:false, flip:false},
-{name:'s7', click:false, flip:false},
-{name:'s6', click:false, flip:false},
-{name:'s5', click:false, flip:false},
-{name:'s4', click:false, flip:false},
-{name:'s3', click:false, flip:false},
-{name:'s2', click:false, flip:false},
+{name:'s09', click:false, flip:false},
+{name:'s08', click:false, flip:false},
+{name:'s07', click:false, flip:false},
+{name:'s06', click:false, flip:false},
+{name:'s05', click:false, flip:false},
+{name:'s04', click:false, flip:false},
+{name:'s03', click:false, flip:false},
+{name:'s02', click:false, flip:false},
 {name:'sA', click:false, flip:false},
 {name:'cK', click:false, flip:false},
 {name:'cQ', click:false, flip:false},
 {name:'cJ', click:false, flip:false},
 {name:'c10', click:false, flip:false},
-{name:'c9', click:false, flip:false},
-{name:'c8', click:false, flip:false},
-{name:'c7', click:false, flip:false},
-{name:'c6', click:false, flip:false},
-{name:'c5', click:false, flip:false},
-{name:'c4', click:false, flip:false},
-{name:'c3', click:false, flip:false},
-{name:'c2', click:false, flip:false},
+{name:'c09', click:false, flip:false},
+{name:'c08', click:false, flip:false},
+{name:'c07', click:false, flip:false},
+{name:'c06', click:false, flip:false},
+{name:'c05', click:false, flip:false},
+{name:'c04', click:false, flip:false},
+{name:'c03', click:false, flip:false},
+{name:'c02', click:false, flip:false},
 {name:'cA', click:false, flip:false},
 ]
 
@@ -73,13 +73,13 @@ let ps = []
 // array.lastelement.color !== card.color 
 // array.lastelement.number === card.num + 1
 
+let p0 = []
 let p1 = []
 let p2 = []
 let p3 = []
 let p4 = []
 let p5 = []
 let p6 = []
-let p7 = []
 
 //BOTTOM PILES
 
@@ -130,74 +130,97 @@ function init(){
     
     let newDeck = deck.splice(0)
 
-    Deal(newDeck)
+    deal(newDeck)
 
-    render()
+    renderMid()
+
 
     
 }
 
-function Deal(deck){
+function deal(deck){
     {
         // migth use this for random numbers
         // console.log(Math.floor(Math.random()*Number(deck.length)))
         
-        p1.unshift(deck.pop())
-        console.log(p1)
-        
+
+        p0.push(deck.pop())
+        console.log(p0)
         for(let i=0; i < 2; i++){
-            p2.unshift(deck.pop())
+            p1.push(deck.pop())
+        }
+        console.log(p1)
+        for(let i=0; i < 3; i++){
+            p2.push(deck.pop())
         }
         console.log(p2)
-        for(let i=0; i < 3; i++){
-            p3.unshift(deck.pop())
+        for(let i=0; i < 4; i++){
+            p3.push(deck.pop())
         }
         console.log(p3)
-        for(let i=0; i < 4; i++){
-            p4.unshift(deck.pop())
+        for(let i=0; i < 5; i++){
+            p4.push(deck.pop())
         }
         console.log(p4)
-        for(let i=0; i < 5; i++){
-            p5.unshift(deck.pop())
+        for(let i=0; i < 6; i++){
+            p5.push(deck.pop())
         }
         console.log(p5)
-        for(let i=0; i < 6; i++){
-            p6.unshift(deck.pop())
+        for(let i=0; i < 7; i++){
+            p6.push(deck.pop())
         }
         console.log(p6)
-        for(let i=0; i < 7; i++){
-            p7.unshift(deck.pop())
-        }
-        console.log(p7)
         
-
-        p1[0].flip = true
-        p2[0].flip = true
-        p3[0].flip = true
-        p4[0].flip = true
-        p5[0].flip = true
-        p6[0].flip = true
-        p7[0].flip = true
+        
+        p0[p0.length-1].flip = true
+        p1[p1.length-1].flip = true
+        p2[p2.length-1].flip = true
+        p3[p3.length-1].flip = true
+        p4[p4.length-1].flip = true
+        p5[p5.length-1].flip = true
+        p6[p6.length-1].flip = true
+        
 
         pm = deck
 
-        
     }
 
 }
-
+0
 function render(){
-    renderTopPiles()
-    renderMediumPiles()
-    renderBottomPiles()
+    renderTop()
+    renderMid()
+    renderBottom()
     renderControls()
 }
 
-function renderTopPiles(){
 
+
+function renderMid(){
+    renderPile(p0,midCards[0])
+    renderPile(p1,midCards[1])
+    renderPile(p2,midCards[2])
+    renderPile(p3,midCards[3])
+    renderPile(p4,midCards[4])
+    renderPile(p5,midCards[5])
+    renderPile(p6,midCards[6])
+    
 }
 
-function handleMove(evt){
+function renderPile(cards,container){
+    cards.forEach((card)=>{
+        const newCard = document.createElement('div')
+        newCard.classList.add('card')
+        newCard.classList.add('shadow')
+        newCard.classList.add('medium')
+        card.flip?
+        newCard.classList.add( `${card.name}`)
+        :newCard.classList.add('back-red')
+        container.appendChild(newCard)
+    })
+}
+
+function handleClick(evt){
     //do this is the element clicked is a card
     if(evt.target.classList.contains('card')){
         evt.target.style.border = 'solid black'
@@ -219,9 +242,9 @@ function render() {
 
 /*----- event listeners -----*/
 
-topPilesEl.addEventListener('click',handleMove)
-midPilesEl.addEventListener('click',handleMove)
-botPilesEl.addEventListener('click',handleMove)
+topPilesEl.addEventListener('click',handleClick)
+midPilesEl.addEventListener('click',handleClick)
+botPilesEl.addEventListener('click',handleClick)
 
 
 

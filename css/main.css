@@ -16,26 +16,26 @@ body {
     justify-content: end;
 }
 
-#pile1, 
-#pile2,
-#pile3,
-#pile4,
-#pile5,
-#pile6,
-#pile7
+#p1, 
+#p2,
+#p3,
+#p4,
+#p5,
+#p6,
+#p7
     {
     border: solid red;
     display: flex;
     flex-direction: column;
 }
 
-#pile1 > div:not(:first-child),
-#pile2 > div:not(:first-child),
-#pile3 > div:not(:first-child),
-#pile4 > div:not(:first-child),
-#pile5 > div:not(:first-child),
-#pile6 > div:not(:first-child),
-#pile7 > div:not(:first-child){
+#p1 > div:not(:first-child),
+#p2 > div:not(:first-child),
+#p3 > div:not(:first-child),
+#p4 > div:not(:first-child),
+#p5 > div:not(:first-child),
+#p6 > div:not(:first-child),
+#p7 > div:not(:first-child){
     margin-top: -100px;
 }
 
