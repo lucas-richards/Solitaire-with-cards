@@ -59,17 +59,21 @@ const deck = [
 
 
 /*----- state variables -----*/
-//boolean
+//boolean 
 let flag
+
+//
+let clickedCard
+let clickedCardEl
 
 //TOP PILES - SUITS
 //Cards will be pushed into these arrays in order A -> K and same suit
 
 let topPiles = [
-    [{name:'hA', click:false, flip:false}],
-    [{name:'s03', click:false, flip:false}],
-    [{name:'c03', click:false, flip:false}],
-    [{name:'d03', click:false, flip:false}]
+    [{name:'hA', click:false, flip:false},{name:'s03', click:false, flip:false}],
+    [{name:'s03', click:false, flip:false},{name:'s03', click:false, flip:false}],
+    [{name:'c03', click:false, flip:false},{name:'s03', click:false, flip:false}],
+    [{name:'d03', click:false, flip:false},{name:'s03', click:false, flip:false}]
 ]
 
 //MIDDLE PILES
@@ -85,6 +89,16 @@ let p3 = []
 let p4 = []
 let p5 = []
 let p6 = []
+
+let midPiles = [
+    {name:'p0',cards:[]},
+    {name:'p1',cards:[]},
+    {name:'p2',cards:[]},
+    {name:'p3',cards:[]},
+    {name:'p4',cards:[]},
+    {name:'p5',cards:[]},
+    {name:'p6',cards:[]},
+]
 
 //BOTTOM PILES
 
@@ -105,7 +119,15 @@ const msgFinEl = document.getElementById('final-msg')
 // top cards container element
 const topPilesEl = document.getElementById('t-piles')
 // mid cards container element
-const midPilesEl = document.getElementById('m-piles')
+
+
+const p0El = document.getElementById('p0')
+const p1El = document.getElementById('p1')
+const p2El = document.getElementById('p2')
+const p3El = document.getElementById('p3')
+const p4El = document.getElementById('p4')
+const p5El = document.getElementById('p5')
+const p6El = document.getElementById('p6')
 // bottom cards container element
 const botPilesEl = document.getElementById('b-piles')
 
@@ -137,6 +159,9 @@ function init(){
 
     flag = true
 
+    clickedCardStr = null
+    
+
     deal(newDeck)
 
     renderMid()
@@ -153,6 +178,8 @@ function deal(deck){
     {
         // migth use this for random numbers
         // console.log(Math.floor(Math.random()*Number(deck.length)))
+
+        
         
         dealMid(p0,1)
         dealMid(p1,2)
@@ -170,16 +197,6 @@ function deal(deck){
 
         }
     
-        
-        // p0[p0.length-1].flip = true
-        // p1[p1.length-1].flip = true
-        // p2[p2.length-1].flip = true
-        // p3[p3.length-1].flip = true
-        // p4[p4.length-1].flip = true
-        // p5[p5.length-1].flip = true
-        // p6[p6.length-1].flip = true
-        
-
         pm = deck
         
 
@@ -222,6 +239,20 @@ function renderMid(){
     
 }
 
+function renderPile(cards,pile){
+    //create a new card for every element in cards array
+    cards.forEach((card)=>{
+        const newCard = document.createElement('div')
+        newCard.classList.add('card')
+        newCard.classList.add('shadow')
+        newCard.classList.add('medium')
+        card.flip?
+        newCard.classList.add( `${card.name}`)
+        :newCard.classList.add('back-red')
+        pile.appendChild(newCard)
+    })
+}
+
 function renderBottom(){
     console.log(botCards)
     console.log(pm)
@@ -241,30 +272,86 @@ function renderBottom(){
 
 }
 
-function renderPile(cards,stack){
-    //create a new card for every element in cards array
-    cards.forEach((card)=>{
-        const newCard = document.createElement('div')
-        newCard.classList.add('card')
-        newCard.classList.add('shadow')
-        newCard.classList.add('medium')
-        card.flip?
-        newCard.classList.add( `${card.name}`)
-        :newCard.classList.add('back-red')
-        stack.appendChild(newCard)
-    })
-}
+
 
 function handleClick(evt){
-    //do this is the element clicked is a card
+    //set invalid message to invisible
+
+    //If a card was clicked and clickedCard is not null do this
     if(evt.target.classList.contains('card')){
-        evt.target.style.border = 'solid black'
         // convert evt.target into array to get the card in the class
         let targetClasses = [...evt.target.classList]
         let card = targetClasses[targetClasses.length-1]
+        if(clickedCardStr===null){
+            evt.target.style.border = 'solid black'
+            clickedCardEl = evt.target
+            clickedCardParentId = evt.currentTarget.id
+            clickedCardStr = card
+
+        }
+        else {
+            
+            //NEED TO ADD CONVERSION FOR A=1 K=13 Q=12 J=11
+
+            //number condition
+            if(Number(card.substring(1))-1=== Number(clickedCardStr.substring(1))){
+                //color condition
+                if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
+                ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
+                    console.log('that could be a good move')
+                    console.log('parent id of clicked card',clickedCardParentId)
+                    console.log('parent id of evt.target card',evt.currentTarget.id)
+                   
+                    //pile where clickedCard is
+                    midPiles.forEach((pile)=>{
+                        //remove card from pile
+                        
+                        if(pile.name===clickedCardParentId){
+                            console.log("I'm inside")
+                            let index = pile.cards.indexOf(clickedCardStr)
+                            if (index>-1)pile.cards,splice(index,1)
+
+                        }
+                        //add card to pile
+                        else if(pile.name===clickedCardParentId){
+                            pile.cards.push(clickedCardStr)
+                            console.log('card was pushed into array')
+
+                        }
+                    })
+
+                    console.log(midPiles)
+
+
+                }
+        
+            }
+            
+            console.log('this is the evt.target card',card)
+            console.log('this is clicked card',clickedCardStr)
+            
+            //reset the clicked element
+            clickedCardEl.style.border = ''
+            clickedCardStr = null
+
+        }
+        
+        
+       
+    }
+    //if a card was not clicked and clickedcard was not null
+    //set clickedcard to null and display for 2 seconds the invalid move message
+    if(!evt.target.classList.contains('card')&&clickedCardEl!==undefined){
+        clickedCardStr = null
+        clickedCardEl.style.border = ''
        
     }
 
+
+
+
+
+    //NOT DONE
     //bottom pile flip cards
     if(evt.target.id === 'pm'&& pm.length!==0){
         console.log('you clicked pm')
@@ -273,8 +360,6 @@ function handleClick(evt){
                 flag=false
                 console.log('flip changes')
                 card.flip = false
-                console.log('this is pm[cardIdx + 1].flip',pm[cardIdx + 1].flip)
-                // pm[cardIdx + 1].flip = true
                 return
             }
         })
@@ -290,12 +375,22 @@ function render() {
     
 }
 
+function attachCard(card){
+    
+
+}
 
 
 /*----- event listeners -----*/
 
 topPilesEl.addEventListener('click',handleClick)
-midPilesEl.addEventListener('click',handleClick)
+p0El.addEventListener('click',handleClick)
+p1El.addEventListener('click',handleClick)
+p2El.addEventListener('click',handleClick)
+p3El.addEventListener('click',handleClick)
+p4El.addEventListener('click',handleClick)
+p5El.addEventListener('click',handleClick)
+p6El.addEventListener('click',handleClick)
 botPilesEl.addEventListener('click',handleClick)
 
 
