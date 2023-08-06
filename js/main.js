@@ -179,23 +179,33 @@ function deal(deck){
         // migth use this for random numbers
         // console.log(Math.floor(Math.random()*Number(deck.length)))
 
-        
-        
-        dealMid(p0,1)
-        dealMid(p1,2)
-        dealMid(p2,3)
-        dealMid(p3,4)
-        dealMid(p4,5)
-        dealMid(p5,6)
-        dealMid(p6,7)
-
-        function dealMid(pile,num){
+        num = 1
+        midPiles.forEach((pile)=>{
             for(let i=0; i < num; i++){
-                pile.push(deck.pop())
+                pile.cards.push(deck.pop())
             }
-            pile[pile.length-1].flip = true
+            pile.cards[pile.cards.length-1].flip = true
+            num++
+        })
 
-        }
+        console.log('these are midPiles',midPiles)
+        
+        
+        // dealMid(p0,1)
+        // dealMid(p1,2)
+        // dealMid(p2,3)
+        // dealMid(p3,4)
+        // dealMid(p4,5)
+        // dealMid(p5,6)
+        // dealMid(p6,7)
+
+        // function dealMid(pile,num){
+        //     for(let i=0; i < num; i++){
+        //         pile.push(deck.pop())
+        //     }
+        //     pile[pile.length-1].flip = true
+
+        // }
     
         pm = deck
         
@@ -229,13 +239,26 @@ function renderTop() {
 
 
 function renderMid(){
-    renderPile(p0,midCards[0])
-    renderPile(p1,midCards[1])
-    renderPile(p2,midCards[2])
-    renderPile(p3,midCards[3])
-    renderPile(p4,midCards[4])
-    renderPile(p5,midCards[5])
-    renderPile(p6,midCards[6])
+    // renderPile(p0,midCards[0])
+    // renderPile(p1,midCards[1])
+    // renderPile(p2,midCards[2])
+    // renderPile(p3,midCards[3])
+    // renderPile(p4,midCards[4])
+    // renderPile(p5,midCards[5])
+    // renderPile(p6,midCards[6])
+
+    midPiles.forEach((pile,index)=>{
+        pile.cards.forEach((card)=>{
+            const newCard = document.createElement('div')
+            newCard.classList.add('card')
+            newCard.classList.add('shadow')
+            newCard.classList.add('medium')
+            card.flip?
+            newCard.classList.add( `${card.name}`)
+            :newCard.classList.add('back-red')
+            midCards[index].appendChild(newCard)
+        })
+    })
     
 }
 
