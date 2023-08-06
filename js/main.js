@@ -59,13 +59,18 @@ const deck = [
 
 
 /*----- state variables -----*/
+//boolean
+let flag
 
 //TOP PILES - SUITS
 //Cards will be pushed into these arrays in order A -> K and same suit
-let ph = []
-let pc = []
-let pd = []
-let ps = []
+
+let topPiles = [
+    [{name:'hA', click:false, flip:false}],
+    [{name:'s03', click:false, flip:false}],
+    [{name:'c03', click:false, flip:false}],
+    [{name:'d03', click:false, flip:false}]
+]
 
 //MIDDLE PILES
 //Cards will be pushed into these arrays if:
@@ -107,13 +112,13 @@ const botPilesEl = document.getElementById('b-piles')
 //TO RENDER
 // top cards array
 const topCards = [...document.querySelectorAll('#t-piles > div')]
-console.log(topCards)
+
 // mid cards array
 const midCards = [...document.querySelectorAll('#m-piles > div')]
-console.log(midCards)
+
 // bottom cards array
 const botCards = [...document.querySelectorAll('#b-piles > div')]
-console.log(botCards)
+
 
 /*----- classes -----*/
 
@@ -130,9 +135,15 @@ function init(){
     
     let newDeck = deck.splice(0)
 
+    flag = true
+
     deal(newDeck)
 
     renderMid()
+
+    renderTop()
+
+    renderBottom()
 
 
     
@@ -143,50 +154,39 @@ function deal(deck){
         // migth use this for random numbers
         // console.log(Math.floor(Math.random()*Number(deck.length)))
         
+        dealMid(p0,1)
+        dealMid(p1,2)
+        dealMid(p2,3)
+        dealMid(p3,4)
+        dealMid(p4,5)
+        dealMid(p5,6)
+        dealMid(p6,7)
 
-        p0.push(deck.pop())
-        console.log(p0)
-        for(let i=0; i < 2; i++){
-            p1.push(deck.pop())
+        function dealMid(pile,num){
+            for(let i=0; i < num; i++){
+                pile.push(deck.pop())
+            }
+            pile[pile.length-1].flip = true
+
         }
-        console.log(p1)
-        for(let i=0; i < 3; i++){
-            p2.push(deck.pop())
-        }
-        console.log(p2)
-        for(let i=0; i < 4; i++){
-            p3.push(deck.pop())
-        }
-        console.log(p3)
-        for(let i=0; i < 5; i++){
-            p4.push(deck.pop())
-        }
-        console.log(p4)
-        for(let i=0; i < 6; i++){
-            p5.push(deck.pop())
-        }
-        console.log(p5)
-        for(let i=0; i < 7; i++){
-            p6.push(deck.pop())
-        }
-        console.log(p6)
+    
         
-        
-        p0[p0.length-1].flip = true
-        p1[p1.length-1].flip = true
-        p2[p2.length-1].flip = true
-        p3[p3.length-1].flip = true
-        p4[p4.length-1].flip = true
-        p5[p5.length-1].flip = true
-        p6[p6.length-1].flip = true
+        // p0[p0.length-1].flip = true
+        // p1[p1.length-1].flip = true
+        // p2[p2.length-1].flip = true
+        // p3[p3.length-1].flip = true
+        // p4[p4.length-1].flip = true
+        // p5[p5.length-1].flip = true
+        // p6[p6.length-1].flip = true
         
 
         pm = deck
+        
 
     }
 
 }
-0
+
 function render(){
     renderTop()
     renderMid()
@@ -194,6 +194,21 @@ function render(){
     renderControls()
 }
 
+function renderTop() {
+
+    topPiles.forEach((pile,eleIdx)=>{
+        if(pile.length!==0){
+            
+            const newCard = document.createElement('div')
+            newCard.classList.add('card')
+            newCard.classList.add('shadow')
+            newCard.classList.add('medium')
+            newCard.classList.add( `${pile[pile.length-1].name}`)
+            topCards[eleIdx].appendChild(newCard)
+        }
+        
+    })
+}
 
 
 function renderMid(){
@@ -207,7 +222,27 @@ function renderMid(){
     
 }
 
-function renderPile(cards,container){
+function renderBottom(){
+    console.log(botCards)
+    console.log(pm)
+    //if the bottom pile is empty -> return (do not render)
+    if(pm.length!==0)return
+    //iterate over pm and show clicked card
+    pm.forEach((card)=>{
+        if(card.flip){
+            const newCard = document.createElement('div')
+            newCard.classList.add('card')
+            newCard.classList.add('shadow')
+            newCard.classList.add('medium')
+            newCard.classList.add( `${card.name}`)
+            botCards[1].appendChild(newCard)
+        }
+    })
+
+}
+
+function renderPile(cards,stack){
+    //create a new card for every element in cards array
     cards.forEach((card)=>{
         const newCard = document.createElement('div')
         newCard.classList.add('card')
@@ -216,7 +251,7 @@ function renderPile(cards,container){
         card.flip?
         newCard.classList.add( `${card.name}`)
         :newCard.classList.add('back-red')
-        container.appendChild(newCard)
+        stack.appendChild(newCard)
     })
 }
 
@@ -227,9 +262,26 @@ function handleClick(evt){
         // convert evt.target into array to get the card in the class
         let targetClasses = [...evt.target.classList]
         let card = targetClasses[targetClasses.length-1]
-        //console.log the card clicked
-        console.log('this is the pile of the card',evt.currentTarget)
-        console.log('this is the card clicked',card)
+       
+    }
+
+    //bottom pile flip cards
+    if(evt.target.id === 'pm'&& pm.length!==0){
+        console.log('you clicked pm')
+        pm.forEach((card,cardIdx)=>{
+            if(card.flip){
+                flag=false
+                console.log('flip changes')
+                card.flip = false
+                console.log('this is pm[cardIdx + 1].flip',pm[cardIdx + 1].flip)
+                // pm[cardIdx + 1].flip = true
+                return
+            }
+        })
+
+        if(flag)pm[0].flip = true
+        console.log(pm)
+      
     }
 
 }
