@@ -170,7 +170,7 @@ function init(){
     
 }
 
-//deal will distribute the cards on the table 1,2,3,4,5,6,7 and 24 
+//deal function distributes the cards on the table 1,2,3,4,5,6,7 and 24 
 function deal(deck){
     {
         // migth use this for random numbers
@@ -184,8 +184,6 @@ function deal(deck){
             pile.cards[pile.cards.length-1].flip = true
             num++
         })
-
-        console.log('these are midPiles',midPiles)
     
         pm = deck
         
@@ -202,7 +200,7 @@ function render(){
 }
 
 function renderTop() {
-
+    //iterates over the topPiles array of arrays and creates divs for each card one on top of each other
     topPiles.forEach((pile,eleIdx)=>{
         if(pile.length!==0){
             
@@ -219,13 +217,14 @@ function renderTop() {
 
 
 function renderMid(){
-
+    //iterates over the midPiles array of arrays and creates divs for each card one on top of each other
     midPiles.forEach((pile,index)=>{
         pile.cards.forEach((card)=>{
             const newCard = document.createElement('div')
             newCard.classList.add('card')
             newCard.classList.add('shadow')
             newCard.classList.add('medium')
+            //if the card flip === true -> show card facing up
             card.flip?
             newCard.classList.add( `${card.name}`)
             :newCard.classList.add('back-red')
@@ -235,10 +234,9 @@ function renderMid(){
     
 }
 
-// IS NOT FINISHED
+// NOT WORKING IS NOT FINISHED
 function renderBottom(){
-    console.log(botCards)
-    console.log(pm)
+    
     //if the bottom pile is empty -> return (do not render)
     if(pm.length!==0)return
     //iterate over pm and show clicked card
@@ -265,6 +263,7 @@ function handleClick(evt){
         // convert evt.target into array to get the card in the class
         let targetClasses = [...evt.target.classList]
         let card = targetClasses[targetClasses.length-1]
+        let cardNum = convertCardToNumber(card)
         
         //This is the first card that is clicked
         if(clickedCardStr===null){
@@ -272,57 +271,77 @@ function handleClick(evt){
             clickedCardEl = evt.target
             clickedCardParentId = evt.currentTarget.id
             clickedCardStr = card
+            clickedCardNum = convertCardToNumber(card)
 
         }
         //This is the second card that is clicked
+        //number condition
         else {
             
+            if(cardNum-1 === clickedCardNum){
 
-            //NEED TO ADD CONVERSION FOR A=1 K=13 Q=12 J=11
+            //color condition
+            if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
+            ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
+                console.log('this is a good move')
+                let removedCards = []
+                //find the clickedcard pile, remove card and save it
+                //IMPROVE BY REMOVING MANY CARDS
+                midPiles.forEach((pile)=>{
+                    if(pile.name===clickedCardParentId){
+                        removedCards.push(pile.cards.pop())
+                        pile.cards[pile.cards.length -1].flip = true
+                        console.log(removedCards)
+                    }
+                                
+                })
+                //add card to pile
+                midPiles.forEach((pile)=>{
+                    if(pile.name===evt.currentTarget.id){
+                        removedCards.forEach((card)=> pile.cards.push(card))
+                                                    
+                    }
+                                
+                })
 
-            //number condition
-            if(Number(card.substring(1))-1=== Number(clickedCardStr.substring(1))){
-                //color condition
-                if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
-                ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
-                    console.log('that could be a good move')
-                   let removedCards = []
-                    //find the clickedcard pile, remove card and save it
-                    //IMPROVE BY REMOVING MANY CARDS
-                    midPiles.forEach((pile)=>{
-                        if(pile.name===clickedCardParentId){
-                            removedCards.push(pile.cards.pop())
-                            pile.cards[pile.cards.length -1].flip = true
-                            console.log(removedCards)
-                        }
-                                    
-                    })
-                    //add card to pile
-                    midPiles.forEach((pile)=>{
-                        if(pile.name===evt.currentTarget.id){
-                            removedCards.forEach((card)=> pile.cards.push(card))
-                                                        
-                        }
-                                    
-                    })
+                console.log(midPiles)
+                renderMid()
 
-                    console.log(midPiles)
-                    renderMid()
-                }
+                
+            }
                 
         
+            
+           
+            
+            
+            
+
+             }
+             //If the second clicked card is on the top pile
+            else if(evt.currentTarget.id === 't-piles'){
+
+                        console.log('the second card clicked was on top')
+
+            }   
+            else   {
+                //invalid move
+                msgInvEl.style.visibility = 'visible' 
+                setTimeout(function(){
+                    msgInvEl.style.visibility = 'hidden' 
+                }, 1000);
+
             }
-            console.log('this is the evt.target card',card)
-            console.log('this is clicked card',clickedCardStr)
-            
-            
+        
             //reset the clicked element
             clickedCardEl.style.border = ''
             clickedCardStr = null
-
+            //display second card clicked
+            // console.log('this is the evt.target card',card)
         }
+
         
-        
+        // console.log('this is clicked card',clickedCardStr)
        
     }
     //if a card was not clicked and clickedcard was not null
@@ -330,11 +349,11 @@ function handleClick(evt){
     if(!evt.target.classList.contains('card')&&clickedCardEl!==undefined){
         clickedCardStr = null
         clickedCardEl.style.border = ''
-       
+
+        
     }
 
-
-
+    
 
 
     //NOT DONE
@@ -357,12 +376,12 @@ function handleClick(evt){
 
 }
 
-function render() {
-    
-}
-
-function attachCard(card){
-    
+function convertCardToNumber(card){
+    if(card.substring(1)==='A')return 1
+    if(card.substring(1)==='J')return 11
+    if(card.substring(1)==='Q')return 12
+    if(card.substring(1)==='K')return 13
+    else return Number(card.substring(1))
 
 }
 
