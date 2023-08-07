@@ -44,6 +44,23 @@
     background-color: rgba(195, 195, 195, 0.5);
     border: 0.15em dashed #daa520; }
 
+.card.c {
+  background-image: url("../images/suits/club.png");
+  background-color: black; 
+}
+.card.d {
+  background-image: url("../images/suits/diamond.png");
+  background-color: black; 
+}
+.card.s {
+  background-image: url("../images/suits/spades.png");
+  background-color: black; 
+}
+.card.h {
+  background-image: url("../images/suits/heart.png");
+  background-color: black; 
+}
+
 .card.diamonds.A,
 .card.dA,
 .card.♦A {
