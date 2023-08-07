@@ -64,6 +64,9 @@ const deck = [
 let clickedCard
 let clickedCardEl
 
+let card
+let cardNum
+
 
 //TOP PILES - SUITS
 //Cards will be pushed into this array of arrays in order A -> K and same suit
@@ -157,6 +160,7 @@ function init(){
         [{name:'d', click:false, flip:true}],
         [{name:'s', click:false, flip:true}]
     ]
+    
 
     clickedCardStr = null
     
@@ -260,7 +264,6 @@ function renderBottom(){
         newCard.classList.add('medium')
         newCard.classList.add( `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
         botCardsEls[1].appendChild(newCard)
-        console.log('created new element',newCard)
     }
     
 
@@ -270,128 +273,146 @@ function renderBottom(){
 
 
 function handleClick(evt){
-    //set invalid message to invisible
 
-    //If a card was clicked and clickedCard is not null do this
+    clickedCardEl = evt.target
+
+    // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
-        // convert evt.target into array to get the card in the class
         let targetClasses = [...evt.target.classList]
-        let card = targetClasses[targetClasses.length-1]
-        let cardNum = convertCardToNumber(card)
+        card = targetClasses[targetClasses.length-1]
+        cardNum = convertCardToNumber(card)
+    }
 
-        //if clicked on bottom pile bottom pile -> flip cards
-        if(evt.target.id === 'bp0'){
-            if(botPiles[0].cards.length!==0){
-                console.log('you clicked bp0')
-                botPiles[1].cards.push(botPiles[0].cards.pop())
-                botPiles[1].cards[botPiles[1].cards.length - 1].flip = true
-                console.log(botPiles[0].cards)
-                console.log(botPiles[1].cards)
-
-            }
-            else {
-                botPiles[0].cards = botPiles[1].cards
-                botPiles[1].cards = []
-
-            }
-            renderBottom()
-      
-        }
-        
-        //This is the first card that is clicked
-        else if(clickedCardStr===null){
-            evt.target.style.border = 'solid black'
-            clickedCardEl = evt.target
-            clickedCardParentId = evt.currentTarget.id
-            clickedCardStr = card
-            clickedCardNum = convertCardToNumber(card)
+    //if clicked on bottom main pile -> flip cards
+    if(evt.target.id === 'bp0'){
+        if(botPiles[0].cards.length!==0){
+            botPiles[1].cards.push(botPiles[0].cards.pop())
+            botPiles[1].cards[botPiles[1].cards.length - 1].flip = true
 
         }
-        //This is the second card that is clicked
-        //number condition
         else {
-            
-            if(cardNum-1 === clickedCardNum && 
-                evt.currentTarget.id !== 'b-piles'){
-                //color condition
-                if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
-                ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
-                    console.log('this is a good move')
+            botPiles[0].cards = botPiles[1].cards
+            botPiles[1].cards = []
+
+        }
+        renderBottom()
+    
+    }
+    
+    //This is the first card clicked
+    else if(clickedCardStr===null && evt.target.classList.contains('card')){
+        evt.target.style.border = 'solid black'
+        clickedCardParentId = evt.currentTarget.id
+        clickedCardStr = card
+        clickedCardNum = convertCardToNumber(card)
+
+    }
+    //This is the second card that is clicked
+    else {
+        //condition to add king to empty pile
+        if(!evt.target.classList.contains('card')){
+            midPiles.forEach((pile)=>{
+                if(evt.currentTarget.id === pile.name &&
+                    pile.cards.length === 0 &&
+                        clickedCardNum === 13){
+
+                    console.log('The king shall move to this pile')
                     
-                    //find the clickedcard pile, remove card and save it
-                    //IMPROVE BY REMOVING MANY CARDS
-                    console.log(clickedCardParentId)
-                    console.log(evt.currentTarget.id)
-                    let removedCards = []
-                    
+                    //is the first card clicked from the bottom -> remove from bottom
                     if(clickedCardParentId === 'bp1'){
-                        console.log('this is coming from bottom',botPiles[1].cards)
                         removedCards = removeCard(botPiles,clickedCardParentId)
-                        console.log('this is removed',removedCards)
-                    } else {
+                    } 
+                    //is the first card clicked from the mid -> remove from mid
+                    else {
                         removedCards = removeCard(midPiles,clickedCardParentId)
                     }
-                   
-                    
                     //add card to pile
                     pushCard(midPiles,evt.currentTarget.id,removedCards)
                     
-
-                    console.log(midPiles)
                     renderMid()
                     renderBottom()
 
-                    
                 }
-                
-    
-            }
-            else if(clickedCardNum == 13){
-                //remove from bottom pile and save card
-                
-                //add to the empty middle pile
+            })
 
-            }
-             //If the second clicked card is on the top pile
-            else if(evt.currentTarget.id === 't-piles'){
-
-                console.log('the second card clicked was on top')
-
-            }   
-            else   {
-                //invalid move
-                msgInvEl.style.visibility = 'visible' 
-                setTimeout(function(){
-                    msgInvEl.style.visibility = 'hidden' 
-                }, 1000);
-
-            }
-        
-            //reset the clicked element
-            clickedCardEl.style.border = ''
-            clickedCardStr = null
-            //display second card clicked
-            // console.log('this is the evt.target card',card)
         }
 
         
-        // console.log('this is clicked card',clickedCardStr)
-       
-    }
-    //if a card was not clicked and clickedcard was not null
-    //set clickedcard to null and display for 2 seconds the invalid move message
-    if(!evt.target.classList.contains('card')&&clickedCardEl!==undefined){
-        clickedCardStr = null
-        clickedCardEl.style.border = ''
 
+        //number condition
+        else if(cardNum-1 === clickedCardNum){
+            //color condition
+            if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
+            ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
+                console.log('this is a good move')
+                
+                //find the clickedcard pile, remove card and save it
+                //IMPROVE BY REMOVING MANY CARDS
+                let removedCards = []
+                
+                //is the first card clicked from the bottom -> remove from bottom
+                if(clickedCardParentId === 'bp1'){
+                    
+                    removedCards = removeCard(botPiles,clickedCardParentId)
+                    
+                } 
+                //is the first card clicked from the mid -> remove from mid
+                else {
+                    removedCards = removeCard(midPiles,clickedCardParentId)
+                }
+                
+                
+                //add card to pile
+                pushCard(midPiles,evt.currentTarget.id,removedCards)
+                
+
+                
+                renderMid()
+                renderBottom()
+
+                
+            }
+            
+
+        }
         
+            //If the second clicked card is on the top pile
+        else if(evt.currentTarget.id === 't-piles'){
+
+            console.log('the second card clicked was on top')
+
+        }  
+        else if(clickedCardNum === 13){
+
+            midPiles.forEach((pile)=>{
+                if(pile.name === evt.currentTarget.id && pile.cards.length === 0){
+                    console.log('the king shall move')
+                    //remove from bottom pile and save card
+            
+                    //add to the empty middle pile
+    
+                }
+            })
+        } 
+        else   {
+            //invalid move
+            msgInvEl.style.visibility = 'visible' 
+            setTimeout(function(){
+                msgInvEl.style.visibility = 'hidden' 
+            }, 1000);
+
+        }
+    
+        //reset the clicked element
+        clickedCardEl.style.border = ''
+        clickedCardStr = null
+            
+        
+        
+
     }
 
     
-
-
-    
-
 }
 
 function convertCardToNumber(card){
