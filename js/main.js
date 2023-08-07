@@ -59,10 +59,8 @@ const deck = [
 
 
 /*----- state variables -----*/
-//boolean 
-let flag
 
-//
+// clicked card is the first clicked card
 let clickedCard
 let clickedCardEl
 
@@ -93,8 +91,8 @@ let midPiles = [
 //BOTTOM PILES
 
 let botPiles = [
-    [],
-    []
+    {name:'bp0',cards:[]},
+    {name:'bp1',cards:[]},
 ]
 
 
@@ -123,6 +121,7 @@ const p5El = document.getElementById('p5')
 const p6El = document.getElementById('p6')
 
 // bottom cards container element
+
 const bp0El = document.getElementById('bp0')
 const bp1El = document.getElementById('bp1')
 
@@ -153,13 +152,12 @@ function init(){
     let newDeck = deck.splice(0)
     //initiate top piles
     topPiles = [
-        [{name:'h', click:false, flip:false}],
-        [{name:'c', click:false, flip:false}],
-        [{name:'d', click:false, flip:false}],
-        [{name:'s', click:false, flip:false}]
+        [{name:'h', click:false, flip:true}],
+        [{name:'c', click:false, flip:true}],
+        [{name:'d', click:false, flip:true}],
+        [{name:'s', click:false, flip:true}]
     ]
 
-    flag = true
     clickedCardStr = null
     
 
@@ -190,7 +188,7 @@ function deal(deck){
             num++
         })
     
-        botPiles[0] = deck
+        botPiles[0].cards = deck
         
 
     }
@@ -251,16 +249,16 @@ function renderMid(){
 function renderBottom(){
     
     //if the bottom pile is empty -> return (do not render)
-    if(botPiles[0].length===0)return
+    if(botPiles[0].cards.length===0)return
     //remove all divs
     bp1El.innerHTML = ''
-    //iterate over botPiles[0] and show clicked card
-    if(botPiles[1].length !== 0){
+    //iterate over botPiles[0].cards and show clicked card
+    if(botPiles[1].cards.length !== 0){
         const newCard = document.createElement('div')
         newCard.classList.add('card')
         newCard.classList.add('shadow')
         newCard.classList.add('medium')
-        newCard.classList.add( `${botPiles[1][0].name}`)
+        newCard.classList.add( `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
         botCardsEls[1].appendChild(newCard)
         console.log('created new element',newCard)
     }
@@ -283,18 +281,17 @@ function handleClick(evt){
 
         //if clicked on bottom pile bottom pile -> flip cards
         if(evt.target.id === 'bp0'){
-            if(botPiles[0].length!==0){
+            if(botPiles[0].cards.length!==0){
                 console.log('you clicked bp0')
-                botPiles[1].unshift(botPiles[0].pop())
-                botPiles[1][0].flip = true
-                console.log(botPiles[0])
-                console.log(botPiles[1])
+                botPiles[1].cards.push(botPiles[0].cards.pop())
+                botPiles[1].cards[botPiles[1].cards.length - 1].flip = true
+                console.log(botPiles[0].cards)
+                console.log(botPiles[1].cards)
 
             }
             else {
-                botPiles[0] = botPiles[1]
-                botPiles[1] = []
-                console.log('botpiles were reset')
+                botPiles[0].cards = botPiles[1].cards
+                botPiles[1].cards = []
 
             }
             renderBottom()
@@ -314,7 +311,8 @@ function handleClick(evt){
         //number condition
         else {
             
-            if(cardNum-1 === clickedCardNum){
+            if(cardNum-1 === clickedCardNum && 
+                evt.currentTarget.id !== 'b-piles'){
                 //color condition
                 if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
                 ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
@@ -322,13 +320,26 @@ function handleClick(evt){
                     
                     //find the clickedcard pile, remove card and save it
                     //IMPROVE BY REMOVING MANY CARDS
-                    let removedCards = removeCard(midPiles,clickedCardParentId)
-
+                    console.log(clickedCardParentId)
+                    console.log(evt.currentTarget.id)
+                    let removedCards = []
+                    
+                    if(clickedCardParentId === 'bp1'){
+                        console.log('this is coming from bottom',botPiles[1].cards)
+                        removedCards = removeCard(botPiles,clickedCardParentId)
+                        console.log('this is removed',removedCards)
+                    } else {
+                        removedCards = removeCard(midPiles,clickedCardParentId)
+                    }
+                   
+                    
                     //add card to pile
                     pushCard(midPiles,evt.currentTarget.id,removedCards)
+                    
 
                     console.log(midPiles)
                     renderMid()
+                    renderBottom()
 
                     
                 }
@@ -344,7 +355,7 @@ function handleClick(evt){
              //If the second clicked card is on the top pile
             else if(evt.currentTarget.id === 't-piles'){
 
-                        console.log('the second card clicked was on top')
+                console.log('the second card clicked was on top')
 
             }   
             else   {
