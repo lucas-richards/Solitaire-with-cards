@@ -16,17 +16,17 @@ body {
     justify-content: end;
 }
 
+#p0,
 #p1, 
 #p2,
 #p3,
 #p4,
 #p5,
-#p6,
-#p7
-    {
+#p6 {
     border: solid red;
     display: flex;
     flex-direction: column;
+    width: 90px;
 }
 
 #p1 > div:not(:first-child),
