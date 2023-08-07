@@ -29,13 +29,13 @@ body {
     width: 90px;
 }
 
+#p0 > div:not(:first-child),
 #p1 > div:not(:first-child),
 #p2 > div:not(:first-child),
 #p3 > div:not(:first-child),
 #p4 > div:not(:first-child),
 #p5 > div:not(:first-child),
-#p6 > div:not(:first-child),
-#p7 > div:not(:first-child){
+#p6 > div:not(:first-child){
     margin-top: -100px;
 }
 

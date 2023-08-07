@@ -72,7 +72,12 @@ let cardNum
 //Cards will be pushed into this array of arrays in order A -> K and same suit
 //The last card will be shown on top
 
-let topPiles
+let topPiles = [
+    {name:'ph',cards:[{name:'h', click:false, flip:true}]},
+    {name:'pc',cards:[{name:'c', click:false, flip:true}]},
+    {name:'pd',cards:[{name:'d', click:false, flip:true}]},
+    {name:'ps',cards:[{name:'s', click:false, flip:true}]},
+]
 
 //MIDDLE PILES
 //Cards will be pushed into these arrays if:
@@ -112,7 +117,10 @@ const msgFinEl = document.getElementById('final-msg')
 
 //TO LISTEN
 // top cards container element
-const topPilesEl = document.getElementById('t-piles')
+const phEl = document.getElementById('ph')
+const pcEl = document.getElementById('pc')
+const pdEl = document.getElementById('pd')
+const psEl = document.getElementById('ps')
 // mid cards container element
 
 const p0El = document.getElementById('p0')
@@ -153,13 +161,7 @@ init()
 function init(){
     //create a copy of the deck
     let newDeck = deck.splice(0)
-    //initiate top piles
-    topPiles = [
-        [{name:'h', click:false, flip:true}],
-        [{name:'c', click:false, flip:true}],
-        [{name:'d', click:false, flip:true}],
-        [{name:'s', click:false, flip:true}]
-    ]
+    
     
 
     clickedCardStr = null
@@ -207,15 +209,20 @@ function render(){
 }
 
 function renderTop() {
-    //iterates over the topPiles array of arrays and creates divs for each card one on top of each other
+    //reset elements for rendering
+    phEl.innerHTML = ''
+    pcEl.innerHTML = ''
+    pdEl.innerHTML = ''
+    psEl.innerHTML = ''
+    //iterates over the topPiles array of arrays and creates divs for each card. One on top of each other
     topPiles.forEach((pile,eleIdx)=>{
-        if(pile.length!==0){
+        if(pile.cards.length!==0){
             
             const newCard = document.createElement('div')
             newCard.classList.add('card')
             newCard.classList.add('shadow')
             newCard.classList.add('medium')
-            newCard.classList.add( `${pile[pile.length-1].name}`)
+            newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
             topCardsEls[eleIdx].appendChild(newCard)
         }
         
@@ -253,7 +260,10 @@ function renderMid(){
 function renderBottom(){
     
     //if the bottom pile is empty -> return (do not render)
-    if(botPiles[0].cards.length===0)return
+    if(botPiles[0].cards.length===0){
+        bp0El.innerHTML = ''
+        return
+    }
     //remove all divs
     bp1El.innerHTML = ''
     //iterate over botPiles[0].cards and show clicked card
@@ -274,12 +284,11 @@ function renderBottom(){
 
 function handleClick(evt){
 
-    clickedCardEl = evt.target
-
     // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
         let targetClasses = [...evt.target.classList]
         card = targetClasses[targetClasses.length-1]
+        clickedCardEl = evt.target
         cardNum = convertCardToNumber(card)
     }
 
@@ -309,7 +318,7 @@ function handleClick(evt){
     }
     //This is the second card that is clicked
     else {
-        //condition to add king to empty pile
+        //NOT A CARD -> condition to add king to empty pile
         if(!evt.target.classList.contains('card')){
             midPiles.forEach((pile)=>{
                 if(evt.currentTarget.id === pile.name &&
@@ -317,58 +326,24 @@ function handleClick(evt){
                         clickedCardNum === 13){
 
                     console.log('The king shall move to this pile')
-                    
-                    //is the first card clicked from the bottom -> remove from bottom
-                    if(clickedCardParentId === 'bp1'){
-                        removedCards = removeCard(botPiles,clickedCardParentId)
-                    } 
-                    //is the first card clicked from the mid -> remove from mid
-                    else {
-                        removedCards = removeCard(midPiles,clickedCardParentId)
-                    }
-                    //add card to pile
-                    pushCard(midPiles,evt.currentTarget.id,removedCards)
-                    
-                    renderMid()
-                    renderBottom()
+
+                    moveCards(clickedCardParentId,evt.currentTarget.id)
+
 
                 }
             })
 
         }
-
         
 
-        //number condition
+        //IS A CARD -> number condition
         else if(cardNum-1 === clickedCardNum){
             //color condition
             if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
             ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
                 console.log('this is a good move')
                 
-                //find the clickedcard pile, remove card and save it
-                //IMPROVE BY REMOVING MANY CARDS
-                let removedCards = []
-                
-                //is the first card clicked from the bottom -> remove from bottom
-                if(clickedCardParentId === 'bp1'){
-                    
-                    removedCards = removeCard(botPiles,clickedCardParentId)
-                    
-                } 
-                //is the first card clicked from the mid -> remove from mid
-                else {
-                    removedCards = removeCard(midPiles,clickedCardParentId)
-                }
-                
-                
-                //add card to pile
-                pushCard(midPiles,evt.currentTarget.id,removedCards)
-                
-
-                
-                renderMid()
-                renderBottom()
+                moveCards(clickedCardParentId,evt.currentTarget.id)
 
                 
             }
@@ -376,30 +351,31 @@ function handleClick(evt){
 
         }
         
-            //If the second clicked card is on the top pile
-        else if(evt.currentTarget.id === 't-piles'){
+        //If the second clicked card is on the top pile
+        else if(clickedCardStr[0]===evt.currentTarget.id[1]){
+            
+            topPiles.forEach((pile)=>{
+                if(pile.name[1]===clickedCardStr[0]){
+                    if((clickedCardNum === 1 && pile.cards.length <2) ||
+                        (cardNum+1 === clickedCardNum)){
+                        moveCards(clickedCardParentId,evt.currentTarget.id)
+                    }
+                    else{
+                        //invalid move
+                        invalidMove()
+                    }
 
-            console.log('the second card clicked was on top')
+                }
+                    
+                
+            })
+        
 
         }  
-        else if(clickedCardNum === 13){
-
-            midPiles.forEach((pile)=>{
-                if(pile.name === evt.currentTarget.id && pile.cards.length === 0){
-                    console.log('the king shall move')
-                    //remove from bottom pile and save card
-            
-                    //add to the empty middle pile
-    
-                }
-            })
-        } 
+        
         else   {
             //invalid move
-            msgInvEl.style.visibility = 'visible' 
-            setTimeout(function(){
-                msgInvEl.style.visibility = 'hidden' 
-            }, 1000);
+            invalidMove()
 
         }
     
@@ -407,7 +383,9 @@ function handleClick(evt){
         clickedCardEl.style.border = ''
         clickedCardStr = null
             
-        
+        renderMid()
+        renderBottom()
+        renderTop()
         
 
     }
@@ -422,6 +400,14 @@ function convertCardToNumber(card){
     if(card.substring(1)==='K')return 13
     else return Number(card.substring(1))
 
+}
+
+function invalidMove(){
+    //invalid move
+    msgInvEl.style.visibility = 'visible' 
+    setTimeout(function(){
+        msgInvEl.style.visibility = 'hidden' 
+    }, 1000);
 }
 
 function removeCard(piles,clickedCardParentId){
@@ -448,10 +434,52 @@ function pushCard(piles,pileId,removedCards){
     })
 }
 
+//IMPROVE BY REMOVING MANY CARDS
+function moveCards(clickedCardParentId,evtCurrentTargetId){
+    //find the clickedcard pile, remove card and save it
+    
+    let removedCards = []
+    if(clickedCardParentId === 'ph'||
+        clickedCardParentId === 'pc'||
+        clickedCardParentId === 'pd'||
+        clickedCardParentId === 'pc'){
+        removedCards = removeCard(topPiles,clickedCardParentId) 
+
+    }
+    //is the first card clicked from the bottom -> remove from bottom
+    else if(clickedCardParentId === 'bp1'){  
+        removedCards = removeCard(botPiles,clickedCardParentId) 
+    } 
+    //is the first card clicked from the mid -> remove from mid
+    else {
+        removedCards = removeCard(midPiles,clickedCardParentId)
+    }
+    
+
+    //add card to pile
+    if(evtCurrentTargetId === 'ph'||
+    evtCurrentTargetId === 'pc'||
+    evtCurrentTargetId === 'pd'||
+    evtCurrentTargetId === 'pc'){
+        pushCard(topPiles,evtCurrentTargetId,removedCards)
+    }
+
+    pushCard(midPiles,evtCurrentTargetId,removedCards)
+
+    console.log(topPiles)
+
+    renderTop()
+    renderMid()
+    renderBottom()
+}
+
 
 /*----- event listeners -----*/
+phEl.addEventListener('click',handleClick)
+pcEl.addEventListener('click',handleClick)
+pdEl.addEventListener('click',handleClick)
+psEl.addEventListener('click',handleClick)
 
-topPilesEl.addEventListener('click',handleClick)
 p0El.addEventListener('click',handleClick)
 p1El.addEventListener('click',handleClick)
 p2El.addEventListener('click',handleClick)
