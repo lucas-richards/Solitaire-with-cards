@@ -104,7 +104,7 @@ const msgInvEl = document.getElementById('inv-msg')
 // msgInvEl.style.visibility = 'visible'
 //win or loose message
 const msgFinEl = document.getElementById('final-msg')
-// msgFinEl.style.visibility = 'visible'
+msgFinEl.style.visibility = 'visible'
 
 //TO LISTEN
 // top cards container element
