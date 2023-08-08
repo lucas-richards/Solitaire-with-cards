@@ -61,52 +61,43 @@ const deck = [
 /*----- state variables -----*/
 
 // clicked card is the first clicked card
-let clickedCard
+let clickedCardStr
 let clickedCardEl
 
+//card is the second clicked card
 let card
 let cardNum
 
+//winner is a number and when gets to 4 -> is a winner
 
-//TOP PILES - SUITS
+let winner
+
+
+//TOP PILES - ARRAY OF OBJECTS
 //Cards will be pushed into this array of arrays in order A -> K and same suit
 //The last card will be shown on top
 
-let topPiles = [
-    {name:'ph',cards:[{name:'h', click:false, flip:true}]},
-    {name:'pc',cards:[{name:'c', click:false, flip:true}]},
-    {name:'pd',cards:[{name:'d', click:false, flip:true}]},
-    {name:'ps',cards:[{name:'s', click:false, flip:true}]},
-]
+let topPiles 
 
-//MIDDLE PILES
+//MIDDLE PILES - ARRAY OF OBJECTS
 //Cards will be pushed into these arrays if:
 // array === 'empty' -> only King can be pushed
 // array.lastelement.color !== card.color 
 // array.lastelement.number === card.num + 1
 
 
-let midPiles = [
-    {name:'p0',cards:[]},
-    {name:'p1',cards:[]},
-    {name:'p2',cards:[]},
-    {name:'p3',cards:[]},
-    {name:'p4',cards:[]},
-    {name:'p5',cards:[]},
-    {name:'p6',cards:[]},
-]
+let midPiles 
 
-//BOTTOM PILES
+//BOTTOM PILES - ARRAY OF OBJECTS
 
-let botPiles = [
-    {name:'bp0',cards:[]},
-    {name:'bp1',cards:[]},
-]
+let botPiles 
 
 
 // another method to push to the front of the array
 /*----- cached elements  -----*/
 
+//give up botton
+const giveUpBtn = document.querySelector('button')
 
 //invalid move message
 const msgInvEl = document.getElementById('inv-msg')
@@ -160,19 +151,40 @@ init()
 
 function init(){
     //create a copy of the deck
-    let newDeck = deck.splice(0)
-    
-    
+    let newDeck = deck.slice()//this does not create copy, is the same object
 
-    clickedCardStr = null
+    console.log('this is a new deck',deck)
     
+    clickedCardStr = null
+
+    winner = 0
+
+    topPiles = [
+        {name:'ph',cards:[{name:'h', click:false, flip:true}]},
+        {name:'pc',cards:[{name:'c', click:false, flip:true}]},
+        {name:'pd',cards:[{name:'d', click:false, flip:true}]},
+        {name:'ps',cards:[{name:'s', click:false, flip:true}]},
+    ]
+
+    midPiles = [
+        {name:'p0',cards:[]},
+        {name:'p1',cards:[]},
+        {name:'p2',cards:[]},
+        {name:'p3',cards:[]},
+        {name:'p4',cards:[]},
+        {name:'p5',cards:[]},
+        {name:'p6',cards:[]},
+    ]
+    
+    botPiles = [
+        {name:'bp0',cards:[]},
+        {name:'bp1',cards:[]},
+    ]
 
     deal(newDeck)
 
-    renderMid()
-
     renderTop()
-
+    renderMid()
     renderBottom()
 
 
@@ -180,7 +192,7 @@ function init(){
 }
 
 //deal function distributes the cards on the table 1,2,3,4,5,6,7 and 24 
-function deal(deck){
+function deal(newDeck){
     {
         // migth use this for random numbers
         // console.log(Math.floor(Math.random()*Number(deck.length)))
@@ -188,13 +200,13 @@ function deal(deck){
         num = 1
         midPiles.forEach((pile)=>{
             for(let i=0; i < num; i++){
-                pile.cards.push(deck.pop())
+                pile.cards.push(newDeck.pop())
             }
             pile.cards[pile.cards.length-1].flip = true
             num++
         })
     
-        botPiles[0].cards = deck
+        botPiles[0].cards = newDeck
         
 
     }
@@ -283,6 +295,7 @@ function renderBottom(){
 
 
 function handleClick(evt){
+    console.log('this is deck',deck)
 
     // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
@@ -318,6 +331,7 @@ function handleClick(evt){
     }
     //This is the second card that is clicked
     else {
+        
         //NOT A CARD -> condition to add king to empty pile
         if(!evt.target.classList.contains('card')){
             midPiles.forEach((pile)=>{
@@ -327,7 +341,7 @@ function handleClick(evt){
 
                     console.log('The king shall move to this pile')
 
-                    moveCards(clickedCardParentId,evt.currentTarget.id)
+                    moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
 
 
                 }
@@ -336,14 +350,16 @@ function handleClick(evt){
         }
         
 
-        //IS A CARD -> number condition
-        else if(cardNum-1 === clickedCardNum){
+        //IS A CARD -> number condition and do not enter if card is in botPile
+        
+        
+        else if(cardNum-1 === clickedCardNum && evt.currentTarget.id!=='bp1'){
             //color condition
             if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
             ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
                 console.log('this is a good move')
                 
-                moveCards(clickedCardParentId,evt.currentTarget.id)
+                moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
 
                 
             }
@@ -358,7 +374,7 @@ function handleClick(evt){
                 if(pile.name[1]===clickedCardStr[0]){
                     if((clickedCardNum === 1 && pile.cards.length <2) ||
                         (cardNum+1 === clickedCardNum)){
-                        moveCards(clickedCardParentId,evt.currentTarget.id)
+                        moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
                     }
                     else{
                         //invalid move
@@ -390,6 +406,16 @@ function handleClick(evt){
 
     }
 
+    //check for a winner
+    topPiles.forEach((pile)=>{
+        if(pile.cards[pile.cards.length -1].name[1] === 'K' )
+        winner++
+    })
+
+    //declare a winner
+    if(winner === 4){
+        msgFinEl.style.visibility = 'visible'
+    }
     
 }
 
@@ -410,14 +436,18 @@ function invalidMove(){
     }, 1000);
 }
 
-function removeCard(piles,clickedCardParentId){
+function removeCards(piles,clickedCardParentId,card){
     let removedCards = []
     piles.forEach((pile)=>{
         if(pile.name===clickedCardParentId){
-            removedCards.push(pile.cards.pop())
-            //if there is another card -> flip it
-            if(pile.cards.length !== 0) pile.cards[pile.cards.length -1].flip = true
-            console.log(removedCards)
+            do{
+                removedCards.unshift(pile.cards.pop())
+                //if there is another card -> flip it
+                if(pile.cards.length !== 0) pile.cards[pile.cards.length -1].flip = true
+                console.log(removedCards)
+                console.log(card)
+            }while(removedCards[0].name !== card)
+            
         }
                     
     })
@@ -435,7 +465,7 @@ function pushCard(piles,pileId,removedCards){
 }
 
 //IMPROVE BY REMOVING MANY CARDS
-function moveCards(clickedCardParentId,evtCurrentTargetId){
+function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     //find the clickedcard pile, remove card and save it
     
     let removedCards = []
@@ -443,16 +473,16 @@ function moveCards(clickedCardParentId,evtCurrentTargetId){
         clickedCardParentId === 'pc'||
         clickedCardParentId === 'pd'||
         clickedCardParentId === 'pc'){
-        removedCards = removeCard(topPiles,clickedCardParentId) 
+        removedCards = removeCards(topPiles,clickedCardParentId,card) 
 
     }
     //is the first card clicked from the bottom -> remove from bottom
     else if(clickedCardParentId === 'bp1'){  
-        removedCards = removeCard(botPiles,clickedCardParentId) 
+        removedCards = removeCards(botPiles,clickedCardParentId,card) 
     } 
     //is the first card clicked from the mid -> remove from mid
     else {
-        removedCards = removeCard(midPiles,clickedCardParentId)
+        removedCards = removeCards(midPiles,clickedCardParentId,card)
     }
     
 
@@ -465,8 +495,6 @@ function moveCards(clickedCardParentId,evtCurrentTargetId){
     }
 
     pushCard(midPiles,evtCurrentTargetId,removedCards)
-
-    console.log(topPiles)
 
     renderTop()
     renderMid()
@@ -490,6 +518,9 @@ p6El.addEventListener('click',handleClick)
 
 bp0El.addEventListener('click',handleClick)
 bp1El.addEventListener('click',handleClick)
+
+
+giveUpBtn.addEventListener('click',init)
 
 
 
