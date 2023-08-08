@@ -458,7 +458,7 @@ function removeCards(piles,clickedCardParentId,card){
                 //if there is another card -> flip it
                 if(pile.cards.length !== 0) pile.cards[pile.cards.length -1].flip = true
             }while(removedCards[0].name !== card)
-            
+             
         }
                     
     })
