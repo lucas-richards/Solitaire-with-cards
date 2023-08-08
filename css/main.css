@@ -3,6 +3,7 @@ body {
     background-image: url("imgs/wood table background.png");
     color: white;
     margin: 0;
+    padding: 20px;
 }
 
 header {
@@ -61,7 +62,6 @@ button {
 .i-msg-cont,.f-msg-cont {
     display: flex;
     justify-content: center;
-    color: black;
 }
 
 #inv-msg {
@@ -76,15 +76,10 @@ button {
 
 #final-msg {
     font-size: 56px;
-    margin-top: -200px;
+    margin-top: -250px;
+    color: black;
     visibility:hidden;
 }
 
-#opacity-div {
-    background-color: white;
-    opacity: 0.5;
-    margin: 0px;
-    padding: 10px;
-}
 
 
