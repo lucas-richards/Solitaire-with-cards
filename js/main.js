@@ -59,6 +59,8 @@ const deck = [
 
 
 /*----- state variables -----*/
+// count moves
+let moves
 
 // clickedCard is the first clicked card
 let clickedCardStr
@@ -101,6 +103,7 @@ const msgInvEl = document.getElementById('inv-msg')
 //win or loose message
 const msgFinEl = document.getElementById('final-msg')
 // msgFinEl.style.visibility = 'visible'
+const msgMoves = document.getElementById('moves')
 
 //TO LISTEN
 // top cards container element
@@ -152,6 +155,8 @@ function init(){
     clickedCardStr = null
 
     winner = 0
+
+    moves = 0
 
     topPiles = [
         {name:'ph',cards:[{name:'h', flip:true}]},
@@ -208,6 +213,11 @@ function render(){
     renderTop()
     renderMid()
     renderBottom()
+    renderMoves()
+}
+
+function renderMoves(){
+    msgMoves.innerText = `Moves: ${moves}`
 }
 
 function renderTop() {
@@ -442,6 +452,8 @@ function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     }
 
     pushCard(midPiles,evtCurrentTargetId,removedCards)
+
+    moves++
 
     render()
 }

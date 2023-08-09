@@ -11,6 +11,12 @@ header {
     text-decoration: underline;
 }
 
+#moves {
+    display: inline;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
 #t-piles {
     display: flex;
     justify-content: end;
