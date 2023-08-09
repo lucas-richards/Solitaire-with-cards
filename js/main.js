@@ -344,6 +344,9 @@ function handleClick(evt){
                 
                 moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
 
+            }else{
+                //invalid move
+                invalidMove()
             }
             
         }
@@ -356,11 +359,11 @@ function handleClick(evt){
                     if((clickedCardNum === 1 && pile.cards.length <2) ||
                         (cardNum+1 === clickedCardNum)){
                         moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
-                    }
-                    else{
+                    }else{
                         //invalid move
                         invalidMove()
                     }
+                    
 
                 }
                     
