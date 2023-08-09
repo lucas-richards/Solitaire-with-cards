@@ -48,7 +48,6 @@ header {
 #b-piles {
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 button {
