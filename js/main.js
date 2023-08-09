@@ -95,7 +95,7 @@ let botPiles
 /*----- cached elements  -----*/
 
 //give up botton
-const tryAgainBtn = document.querySelector('button')
+const giveUpBtn = document.querySelector('button')
 
 //invalid move message
 const msgInvEl = document.getElementById('inv-msg')
@@ -271,13 +271,27 @@ function renderMid(){
 // NOT WORKING IS NOT FINISHED
 function renderBottom(){
     
-    //if the bottom pile is empty -> return (do not render)
-    if(botPiles[0].cards.length===0){
-        bp0El.innerHTML = ''
-        return
-    }
+    // if the bottom pile is empty -> return (do not render)
+    // if(botPiles[0].cards.length===0){
+    //     bp0El.innerHTML = ''
+    //     return
+    // }
     //remove all divs
+    bp0El.innerHTML = ''
     bp1El.innerHTML = ''
+
+    //iterate over botPiles[0].cards and show clicked card
+    console.log('this is botPiles[0].cards.length',botPiles[0].cards.length)
+    console.log('this is botPiles[1].cards.length',botPiles[1].cards.length)
+    if(botPiles[0].cards.length !== 0 || botPiles[1].cards.length !== 0){
+        const newCard = document.createElement('div')
+        newCard.classList.add('card')
+        newCard.classList.add('shadow')
+        newCard.classList.add('medium')
+        newCard.classList.add('back-red')
+        botCardsEls[0].appendChild(newCard)
+    }
+
     //iterate over botPiles[0].cards and show clicked card
     if(botPiles[1].cards.length !== 0){
         const newCard = document.createElement('div')
@@ -305,13 +319,15 @@ function handleClick(evt){
     }
 
     //if clicked on bottom main pile -> flip cards
-    if(evt.target.id === 'bp0'){
+    if(evt.currentTarget.id === 'bp0'){
         if(botPiles[0].cards.length!==0){
-            botPiles[1].cards.push(botPiles[0].cards.pop())
+            console.log(botPiles[0].cards.length)
+            botPiles[1].cards.push(botPiles[0].cards.shift())
             botPiles[1].cards[botPiles[1].cards.length - 1].flip = true
 
         }
         else {
+            
             botPiles[0].cards = botPiles[1].cards
             botPiles[1].cards = []
 
@@ -400,10 +416,14 @@ function handleClick(evt){
         if(pile.cards[pile.cards.length -1].name[1] === 'K' )
         winner++
     })
+    console.log('this is winner',winner)
 
     //declare a winner
     if(winner === 4){
         msgFinEl.style.visibility = 'visible'
+    }else {
+        msgFinEl.style.visibility = 'hidden'
+        winner = 0
     }
     
 }
@@ -428,10 +448,9 @@ function invalidMove(){
 function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     //find the clickedcard pile, remove card and save it
     let removedCards = []
-    if(clickedCardParentId === 'ph'||
-        clickedCardParentId === 'pc'||
-        clickedCardParentId === 'pd'||
-        clickedCardParentId === 'ps'){
+    const topArray = ['ph','pc','pd','ps'] 
+
+    if(topArray.includes(clickedCardParentId)){
         removedCards = removeCards(topPiles,clickedCardParentId,card) 
 
     }
@@ -444,10 +463,7 @@ function moveCards(clickedCardParentId,evtCurrentTargetId,card){
         removedCards = removeCards(midPiles,clickedCardParentId,card)
     }
     //add card to pile
-    if(evtCurrentTargetId === 'ph'||
-    evtCurrentTargetId === 'pc'||
-    evtCurrentTargetId === 'pd'||
-    evtCurrentTargetId === 'ps'){
+    if(topArray.includes(evtCurrentTargetId)){
         pushCard(topPiles,evtCurrentTargetId,removedCards)
     }
 
@@ -503,7 +519,7 @@ bp0El.addEventListener('click',handleClick)
 bp1El.addEventListener('click',handleClick)
 
 
-tryAgainBtn.addEventListener('click',init)
+giveUpBtn.addEventListener('click',init)
 
 
 
