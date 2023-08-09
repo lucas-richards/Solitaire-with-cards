@@ -3,58 +3,58 @@ console.log('working')
 /*----- constants -----*/
 
 const deck = [
-{name:'hK', click:false, flip:false},
-{name:'hQ', click:false, flip:false},
-{name:'hJ', click:false, flip:false},
-{name:'h10', click:false, flip:false},
-{name:'h09', click:false, flip:false},
-{name:'h08', click:false, flip:false},
-{name:'h07', click:false, flip:false},
-{name:'h06', click:false, flip:false},
-{name:'h05', click:false, flip:false},
-{name:'h04', click:false, flip:false},
-{name:'h03', click:false, flip:false},
-{name:'h02', click:false, flip:false},
-{name:'hA', click:false, flip:false},
-{name:'dK', click:false, flip:false},
-{name:'dQ', click:false, flip:false},
-{name:'dJ', click:false, flip:false},
-{name:'d10', click:false, flip:false},
-{name:'d09', click:false, flip:false},
-{name:'d08', click:false, flip:false},
-{name:'d07', click:false, flip:false},
-{name:'d06', click:false, flip:false},
-{name:'d05', click:false, flip:false},
-{name:'d04', click:false, flip:false},
-{name:'d03', click:false, flip:false},
-{name:'d02', click:false, flip:false},
-{name:'dA', click:false, flip:false},
-{name:'sK', click:false, flip:false},
-{name:'sQ', click:false, flip:false},
-{name:'sJ', click:false, flip:false},
-{name:'s10', click:false, flip:false},
-{name:'s09', click:false, flip:false},
-{name:'s08', click:false, flip:false},
-{name:'s07', click:false, flip:false},
-{name:'s06', click:false, flip:false},
-{name:'s05', click:false, flip:false},
-{name:'s04', click:false, flip:false},
-{name:'s03', click:false, flip:false},
-{name:'s02', click:false, flip:false},
-{name:'sA', click:false, flip:false},
-{name:'cK', click:false, flip:false},
-{name:'cQ', click:false, flip:false},
-{name:'cJ', click:false, flip:false},
-{name:'c10', click:false, flip:false},
-{name:'c09', click:false, flip:false},
-{name:'c08', click:false, flip:false},
-{name:'c07', click:false, flip:false},
-{name:'c06', click:false, flip:false},
-{name:'c05', click:false, flip:false},
-{name:'c04', click:false, flip:false},
-{name:'c03', click:false, flip:false},
-{name:'c02', click:false, flip:false},
-{name:'cA', click:false, flip:false},
+{name:'hK', flip:false},
+{name:'hQ', flip:false},
+{name:'hJ', flip:false},
+{name:'h10', flip:false},
+{name:'h09', flip:false},
+{name:'h08', flip:false},
+{name:'h07', flip:false},
+{name:'h06', flip:false},
+{name:'h05', flip:false},
+{name:'h04', flip:false},
+{name:'h03', flip:false},
+{name:'h02', flip:false},
+{name:'hA', flip:false},
+{name:'dK', flip:false},
+{name:'dQ', flip:false},
+{name:'dJ', flip:false},
+{name:'d10', flip:false},
+{name:'d09', flip:false},
+{name:'d08', flip:false},
+{name:'d07', flip:false},
+{name:'d06', flip:false},
+{name:'d05', flip:false},
+{name:'d04', flip:false},
+{name:'d03', flip:false},
+{name:'d02', flip:false},
+{name:'dA', flip:false},
+{name:'sK', flip:false},
+{name:'sQ', flip:false},
+{name:'sJ', flip:false},
+{name:'s10', flip:false},
+{name:'s09', flip:false},
+{name:'s08', flip:false},
+{name:'s07', flip:false},
+{name:'s06', flip:false},
+{name:'s05', flip:false},
+{name:'s04', flip:false},
+{name:'s03', flip:false},
+{name:'s02', flip:false},
+{name:'sA', flip:false},
+{name:'cK', flip:false},
+{name:'cQ', flip:false},
+{name:'cJ', flip:false},
+{name:'c10', flip:false},
+{name:'c09', flip:false},
+{name:'c08', flip:false},
+{name:'c07', flip:false},
+{name:'c06', flip:false},
+{name:'c05', flip:false},
+{name:'c04', flip:false},
+{name:'c03', flip:false},
+{name:'c02', flip:false},
+{name:'cA', flip:false},
 ]
 
 
@@ -146,7 +146,7 @@ init()
 
 function init(){
     //create a copy of the deck
-    let newDeck = deck.slice()//this does not create copy, is the same object
+    let newDeck = JSON.parse(JSON.stringify(deck))
     
     //initialize variables
     clickedCardStr = null
@@ -154,10 +154,10 @@ function init(){
     winner = 0
 
     topPiles = [
-        {name:'ph',cards:[{name:'h', click:false, flip:true}]},
-        {name:'pc',cards:[{name:'c', click:false, flip:true}]},
-        {name:'pd',cards:[{name:'d', click:false, flip:true}]},
-        {name:'ps',cards:[{name:'s', click:false, flip:true}]},
+        {name:'ph',cards:[{name:'h', flip:true}]},
+        {name:'pc',cards:[{name:'c', flip:true}]},
+        {name:'pd',cards:[{name:'d', flip:true}]},
+        {name:'ps',cards:[{name:'s', flip:true}]},
     ]
 
     midPiles = [
@@ -175,11 +175,10 @@ function init(){
         {name:'bp1',cards:[]},
     ]
 
+
+
     deal(newDeck)
 
-    // renderTop()
-    // renderMid()
-    // renderBottom()
 
     render()
     
@@ -187,8 +186,9 @@ function init(){
 
 //deal function distributes the cards on the table 1,2,3,4,5,6,7 and 24 
 function deal(newDeck){
-    // migth use this for random numbers
-    // console.log(Math.floor(Math.random()*Number(deck.length)))
+    //shuffle newDeck
+    newDeck.sort( () => Math.random() - 0.5)
+
     num = 1
     midPiles.forEach((pile)=>{
         for(let i=0; i < num; i++){
@@ -199,6 +199,8 @@ function deal(newDeck){
     })
 
     botPiles[0].cards = newDeck
+
+    
 
 }
 
@@ -326,10 +328,7 @@ function handleClick(evt){
                     pile.cards.length === 0 &&
                         clickedCardNum === 13){
 
-                    console.log('The king shall move to this pile')
-
                     moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
-
 
                 }
             })
@@ -342,14 +341,11 @@ function handleClick(evt){
             //color condition
             if(((card[0]==='d'||card[0]==='h')&& (clickedCardStr[0]==='c'||clickedCardStr[0]==='s'))||
             ((card[0]==='c'||card[0]==='s')&& (clickedCardStr[0]==='d'||clickedCardStr[0]==='h'))){
-                console.log('this is a good move')
                 
                 moveCards(clickedCardParentId,evt.currentTarget.id,clickedCardStr)
 
-                
             }
             
-
         }
         
         //If the second clicked card is on the top pile
@@ -368,10 +364,8 @@ function handleClick(evt){
 
                 }
                     
-                
             })
-        
-
+    
         }  
         
         else   {
@@ -424,7 +418,7 @@ function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     if(clickedCardParentId === 'ph'||
         clickedCardParentId === 'pc'||
         clickedCardParentId === 'pd'||
-        clickedCardParentId === 'pc'){
+        clickedCardParentId === 'ps'){
         removedCards = removeCards(topPiles,clickedCardParentId,card) 
 
     }
@@ -440,7 +434,7 @@ function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     if(evtCurrentTargetId === 'ph'||
     evtCurrentTargetId === 'pc'||
     evtCurrentTargetId === 'pd'||
-    evtCurrentTargetId === 'pc'){
+    evtCurrentTargetId === 'ps'){
         pushCard(topPiles,evtCurrentTargetId,removedCards)
     }
 
