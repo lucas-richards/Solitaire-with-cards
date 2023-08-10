@@ -138,6 +138,7 @@ init()
 
 function init(){
     //create a copy of the deck
+    console.log('game is initialized')
     
     let newDeck = deck.slice()
 
@@ -283,14 +284,18 @@ function renderBottom(){
         newCard.classList.add( `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
         botCardsEls[1].appendChild(newCard)
     }
-    
-
 
 }
 
 
-
 function handleClick(evt){
+    //SHOW WINNER
+    // topPiles = [
+    //     {name:'ph',cards:[{name:'hK', flip:true}]},
+    //     {name:'pc',cards:[{name:'cK', flip:true}]},
+    //     {name:'pd',cards:[{name:'dK', flip:true}]},
+    //     {name:'ps',cards:[{name:'sK', flip:true}]},
+    // ]
 
     // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
