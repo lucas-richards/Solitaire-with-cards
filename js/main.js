@@ -482,24 +482,17 @@ function pushCard(piles,pileId,removedCards){
     })
 }
 
+function addEventHandleClick(piles){
+    piles.forEach((pile)=>{
+        pile.addEventListener('click',handleClick)
+    })
+}
 
 /*----- event listeners -----*/
-phEl.addEventListener('click',handleClick)
-pcEl.addEventListener('click',handleClick)
-pdEl.addEventListener('click',handleClick)
-psEl.addEventListener('click',handleClick)
 
-p0El.addEventListener('click',handleClick)
-p1El.addEventListener('click',handleClick)
-p2El.addEventListener('click',handleClick)
-p3El.addEventListener('click',handleClick)
-p4El.addEventListener('click',handleClick)
-p5El.addEventListener('click',handleClick)
-p6El.addEventListener('click',handleClick)
-
-bp0El.addEventListener('click',handleClick)
-bp1El.addEventListener('click',handleClick)
-
+addEventHandleClick(topCardsEls)
+addEventHandleClick(midCardsEls)
+addEventHandleClick(botCardsEls)
 
 tryAgainBtn.addEventListener('click',init)
 
