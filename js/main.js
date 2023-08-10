@@ -1,4 +1,3 @@
-console.log('working')
 
 /*----- constants -----*/
 
@@ -103,7 +102,6 @@ const msgInvEl = document.getElementById('inv-msg')
 //win or loose message
 const msgFinEl = document.getElementById('final-msg')
 const backgroundWinEl = document.getElementsByClassName('f-msg-cont')
-console.log(backgroundWinEl)
 // backgroundWinEl[0].style.visibility = 'visible'
 const msgMoves = document.getElementById('moves')
 
@@ -136,6 +134,7 @@ const midCardsEls = [...document.querySelectorAll('#m-piles > div')]
 
 // bottom cards array
 const botCardsEls = [...document.querySelectorAll('#b-piles > div')]
+
 
 
 /*----- classes -----*/
@@ -182,8 +181,6 @@ function init(){
         {name:'bp1',cards:[]},
     ]
 
-
-
     deal(newDeck)
 
 
@@ -196,6 +193,7 @@ function deal(newDeck){
     //shuffle newDeck
     newDeck.sort( () => Math.random() - 0.5)
 
+    //distribute cards 
     num = 1
     midPiles.forEach((pile)=>{
         for(let i=0; i < num; i++){
@@ -205,9 +203,8 @@ function deal(newDeck){
         num++
     })
 
+    //rest of the cards to the bottom pile
     botPiles[0].cards = newDeck
-
-    
 
 }
 
@@ -222,12 +219,16 @@ function renderMoves(){
     msgMoves.innerText = `Moves: ${moves}`
 }
 
+function renderReset(piles){
+    piles.forEach((pile)=>{
+        pile.innerHTML = ''
+    })
+}
+
 function renderTop() {
     //reset elements for rendering
-    phEl.innerHTML = ''
-    pcEl.innerHTML = ''
-    pdEl.innerHTML = ''
-    psEl.innerHTML = ''
+    renderReset(topCardsEls)
+
     //iterates over the topPiles array of arrays and creates divs for each card. One on top of each other
     topPiles.forEach((pile,eleIdx)=>{
         if(pile.cards.length!==0){
@@ -244,13 +245,8 @@ function renderTop() {
 
 function renderMid(){
     //remove all cards
-    p0El.innerHTML = ''
-    p1El.innerHTML = ''
-    p2El.innerHTML = ''
-    p3El.innerHTML = ''
-    p4El.innerHTML = ''
-    p5El.innerHTML = ''
-    p6El.innerHTML = ''
+    renderReset(midCardsEls)
+   
     //iterates over the midPiles array of arrays and creates divs for each card one on top of each other
     midPiles.forEach((pile,index)=>{
         pile.cards.forEach((card)=>{
@@ -269,8 +265,7 @@ function renderMid(){
 // render the bottom piles
 function renderBottom(){
     
-    bp0El.innerHTML = ''
-    bp1El.innerHTML = ''
+    renderReset(botCardsEls)
 
     //iterate over botPiles[0].cards and show clicked card
     if(botPiles[0].cards.length !== 0 || botPiles[1].cards.length !== 0){
