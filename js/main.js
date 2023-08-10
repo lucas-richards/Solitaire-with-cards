@@ -95,14 +95,16 @@ let botPiles
 /*----- cached elements  -----*/
 
 //give up botton
-const giveUpBtn = document.querySelector('button')
+const tryAgainBtn = document.querySelector('button')
 
 //invalid move message
 const msgInvEl = document.getElementById('inv-msg')
 // msgInvEl.style.visibility = 'visible'
 //win or loose message
 const msgFinEl = document.getElementById('final-msg')
-// msgFinEl.style.visibility = 'visible'
+const backgroundWinEl = document.getElementsByClassName('f-msg-cont')
+console.log(backgroundWinEl)
+// backgroundWinEl[0].style.visibility = 'visible'
 const msgMoves = document.getElementById('moves')
 
 //TO LISTEN
@@ -231,9 +233,7 @@ function renderTop() {
         if(pile.cards.length!==0){
             
             const newCard = document.createElement('div')
-            newCard.classList.add('card')
-            newCard.classList.add('shadow')
-            newCard.classList.add('medium')
+            newCard.classList.add('card','shadow','medium')
             newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
             topCardsEls[eleIdx].appendChild(newCard)
         }
@@ -255,9 +255,7 @@ function renderMid(){
     midPiles.forEach((pile,index)=>{
         pile.cards.forEach((card)=>{
             const newCard = document.createElement('div')
-            newCard.classList.add('card')
-            newCard.classList.add('shadow')
-            newCard.classList.add('medium')
+            newCard.classList.add('card','shadow','medium')
             //if the card flip === true -> show card facing up
             card.flip?
             newCard.classList.add( `${card.name}`)
@@ -268,36 +266,23 @@ function renderMid(){
     
 }
 
-// NOT WORKING IS NOT FINISHED
+// render the bottom piles
 function renderBottom(){
     
-    // if the bottom pile is empty -> return (do not render)
-    // if(botPiles[0].cards.length===0){
-    //     bp0El.innerHTML = ''
-    //     return
-    // }
-    //remove all divs
     bp0El.innerHTML = ''
     bp1El.innerHTML = ''
 
     //iterate over botPiles[0].cards and show clicked card
-    console.log('this is botPiles[0].cards.length',botPiles[0].cards.length)
-    console.log('this is botPiles[1].cards.length',botPiles[1].cards.length)
     if(botPiles[0].cards.length !== 0 || botPiles[1].cards.length !== 0){
         const newCard = document.createElement('div')
-        newCard.classList.add('card')
-        newCard.classList.add('shadow')
-        newCard.classList.add('medium')
-        newCard.classList.add('back-red')
+        newCard.classList.add('card','shadow','medium','back-red')
         botCardsEls[0].appendChild(newCard)
     }
 
     //iterate over botPiles[0].cards and show clicked card
     if(botPiles[1].cards.length !== 0){
         const newCard = document.createElement('div')
-        newCard.classList.add('card')
-        newCard.classList.add('shadow')
-        newCard.classList.add('medium')
+        newCard.classList.add('card','shadow','medium')
         newCard.classList.add( `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
         botCardsEls[1].appendChild(newCard)
     }
@@ -421,8 +406,10 @@ function handleClick(evt){
     //declare a winner
     if(winner === 4){
         msgFinEl.style.visibility = 'visible'
+        backgroundWinEl[0].style.visibility = 'visible'
     }else {
         msgFinEl.style.visibility = 'hidden'
+        backgroundWinEl[0].style.visibility = 'hidden'
         winner = 0
     }
     
@@ -519,7 +506,7 @@ bp0El.addEventListener('click',handleClick)
 bp1El.addEventListener('click',handleClick)
 
 
-giveUpBtn.addEventListener('click',init)
+tryAgainBtn.addEventListener('click',init)
 
 
 
