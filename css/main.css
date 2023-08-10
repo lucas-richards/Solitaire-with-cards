@@ -62,12 +62,56 @@ button{
     margin-top: -50px;
     border-radius: 5px;
     opacity: 0.7;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+#img-cont {
+    position: relative;
 }
 
 img {
     float: left;
-    margin-left: -20px;
+    margin-left: -35px;
+    margin-top: -40px;
 }
+
+#info-icon {
+    position: absolute;
+    bottom: -30px;
+    left: 150px;
+    opacity: 0.6;
+    cursor: pointer;
+    width: 30px;
+}
+
+#info-icon:hover {
+    opacity: 1;
+}
+
+#info-cont {
+    color: black;
+    padding: 30px;
+    position: absolute;
+    bottom: 10px;
+    left: 140px;
+    background-color: white;
+    width: 500px;
+    height: 250px;
+    opacity: 0.9;
+    border-radius: 25px 0 0 25px;
+    visibility: hidden;
+    overflow: auto;
+}
+
+span {
+    text-decoration: underline;
+}
+
+
 
 .i-msg-cont,.f-msg-cont {
     display: flex;
@@ -80,7 +124,7 @@ img {
     left: -0px;
     visibility:hidden;
     width: 100%;
-    height: 100%;
+    height: 100vw;
     background-color: white;
     opacity: 0.8;
     text-align: center;

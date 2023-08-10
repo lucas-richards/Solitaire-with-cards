@@ -56,6 +56,17 @@ const deck = [
 {name:'cA', flip:false},
 ]
 
+const rules = [
+    {name:'Objective',desc:' Move all cards to foundation piles, organized by suit and in ascending order from Ace to King.'},
+    {name:'rule 1',desc:' Move cards in descending order and alternating colors (red and black) onto each other in the tableau.'},
+    {name:'rule 2',desc:' Cards can be moved individually or in groups if they form a valid descending sequence.'},
+    {name:'rule 3',desc:' Top cards of tableau piles and the stock pile are available for play.'},
+    {name:'rule 4',desc:' A King or a group of cards with a King on top can be moved to an empty tableau pile.'},
+    {name:'rule 5',desc:' Start foundation piles with Aces.'},
+    {name:'rule 6',desc:' Build up each foundation pile by suit in ascending order (Ace, 2, 3, ..., King).'},
+    {name:'rule 7',desc:' Draw cards from the stock pile one at a time.'},
+]
+
 
 /*----- state variables -----*/
 // count moves
@@ -92,38 +103,22 @@ let botPiles
 
 
 /*----- cached elements  -----*/
+//info button
+const infoIcon = document.getElementById('info-icon')
+const infoCont = document.getElementById('info-cont')
+const rulesEl = document.querySelector('#info-cont > ul')
 
-//give up botton
+//try again button
 const tryAgainBtn = document.querySelector('button')
 
 //invalid move message
 const msgInvEl = document.getElementById('inv-msg')
-// msgInvEl.style.visibility = 'visible'
+
 //win or loose message
 const msgFinEl = document.getElementById('final-msg')
 const backgroundWinEl = document.getElementsByClassName('f-msg-cont')
 // backgroundWinEl[0].style.visibility = 'visible'
 const msgMoves = document.getElementById('moves')
-
-//TO LISTEN
-// top cards container element
-const phEl = document.getElementById('ph')
-const pcEl = document.getElementById('pc')
-const pdEl = document.getElementById('pd')
-const psEl = document.getElementById('ps')
-
-// mid cards container element
-const p0El = document.getElementById('p0')
-const p1El = document.getElementById('p1')
-const p2El = document.getElementById('p2')
-const p3El = document.getElementById('p3')
-const p4El = document.getElementById('p4')
-const p5El = document.getElementById('p5')
-const p6El = document.getElementById('p6')
-
-// bottom cards container element
-const bp0El = document.getElementById('bp0')
-const bp1El = document.getElementById('bp1')
 
 //TO RENDER
 // top cards array
@@ -136,13 +131,6 @@ const midCardsEls = [...document.querySelectorAll('#m-piles > div')]
 const botCardsEls = [...document.querySelectorAll('#b-piles > div')]
 
 
-
-/*----- classes -----*/
-
-
-
-
-
 /*----- functions -----*/
 
 init()
@@ -150,7 +138,10 @@ init()
 
 function init(){
     //create a copy of the deck
-    let newDeck = JSON.parse(JSON.stringify(deck))
+    
+    let newDeck = deck.slice()
+
+    resetCards(newDeck)
     
     //initialize variables
     clickedCardStr = null
@@ -185,7 +176,18 @@ function init(){
 
 
     render()
+
+    //check for a winner
+    checkWinner()
+
+    createRulesElements()
     
+}
+
+function resetCards(deck){
+    deck.forEach((card)=>{
+        card.flip = false
+    })
 }
 
 //deal function distributes the cards on the table 1,2,3,4,5,6,7 and 24 
@@ -392,21 +394,9 @@ function handleClick(evt){
     }
 
     //check for a winner
-    topPiles.forEach((pile)=>{
-        if(pile.cards[pile.cards.length -1].name[1] === 'K' )
-        winner++
-    })
-    console.log('this is winner',winner)
+    checkWinner()
 
-    //declare a winner
-    if(winner === 4){
-        msgFinEl.style.visibility = 'visible'
-        backgroundWinEl[0].style.visibility = 'visible'
-    }else {
-        msgFinEl.style.visibility = 'hidden'
-        backgroundWinEl[0].style.visibility = 'hidden'
-        winner = 0
-    }
+    
     
 }
 
@@ -482,9 +472,41 @@ function pushCard(piles,pileId,removedCards){
     })
 }
 
+function checkWinner(){
+    topPiles.forEach((pile)=>{
+        if(pile.cards[pile.cards.length -1].name[1] === 'K' )
+        winner++
+    })
+    console.log('this is winner',winner)
+
+    //declare a winner
+    if(winner === 4){
+        msgFinEl.style.visibility = 'visible'
+        backgroundWinEl[0].style.visibility = 'visible'
+    }else {
+        msgFinEl.style.visibility = 'hidden'
+        backgroundWinEl[0].style.visibility = 'hidden'
+        winner = 0
+    }
+}
+
 function addEventHandleClick(piles){
     piles.forEach((pile)=>{
-        pile.addEventListener('click',handleClick)
+        pile.addEventListener('click', handleClick)
+    })
+}
+
+function showRules(){
+    if(infoCont.style.visibility === 'visible')infoCont.style.visibility = 'hidden'
+    else infoCont.style.visibility = 'visible'
+}
+
+function createRulesElements(){
+    rules.forEach((rule)=>{
+        const newRule = document.createElement('li')
+        newRule.innerHTML = `<span>${rule.name}</span>:${rule.desc}`
+        rulesEl.appendChild(newRule)
+        
     })
 }
 
@@ -494,7 +516,9 @@ addEventHandleClick(topCardsEls)
 addEventHandleClick(midCardsEls)
 addEventHandleClick(botCardsEls)
 
-tryAgainBtn.addEventListener('click',init)
+tryAgainBtn.addEventListener('click', init)
+
+infoIcon.addEventListener('click',showRules)
 
 
 
