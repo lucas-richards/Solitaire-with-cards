@@ -34,13 +34,12 @@ As a user, I want to be able to...
 
 **Bonus User Stories**
 (These features would be nice to have if I have time to build them)
+- count moves
+- add set of rules
 - drag and drop feature
 - loose if it is impossible to make any other move
-- choose what do you want to drink while playing
 - Option to choose an easy game (1 card) or hard game (3 cards) 
-- timer
 - keep track of how many moves the player made in previous games
-- choose the image of the table
 - help button to give me a possible move
 
 ## Overall design (look and feel) of the app

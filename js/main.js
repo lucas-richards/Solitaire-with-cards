@@ -502,6 +502,7 @@ function showRules(){
 }
 
 function createRulesElements(){
+    rulesEl.innerHTML = ''
     rules.forEach((rule)=>{
         const newRule = document.createElement('li')
         newRule.innerHTML = `<span>${rule.name}</span>:${rule.desc}`
