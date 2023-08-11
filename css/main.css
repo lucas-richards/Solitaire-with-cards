@@ -152,5 +152,19 @@ span {
     
 }
 
+.winner {
+    position: relative;
+}
+
+.winner > div:first-child {
+    position: absolute;
+    top:1px;
+    left: 1px;
+}
+.winner > div:last-child {
+    position: absolute;
+    bottom:10px;
+    left: 10px;
+}
 
 

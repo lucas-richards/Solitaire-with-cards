@@ -182,6 +182,11 @@ function init(){
     checkWinner()
 
     createRulesElements()
+
+    
+
+    
+
     
 }
 
@@ -488,11 +493,40 @@ function checkWinner(){
     if(winner === 4){
         msgFinEl.style.visibility = 'visible'
         backgroundWinEl[0].style.visibility = 'visible'
+
+        for(let a=1;a < 70; a+=10){
+            console.log(a)
+            topPiles.forEach((pile,eleIdx)=>{
+                for(let i=0;i < 50 ; i++){
+                    setTimeout(()=>{
+                        const newCard = document.createElement('div')
+                        newCard.classList.add('card','shadow','medium')
+                        newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
+                        newCard.style.position = 'absolute'
+                        newCard.style.top = `${i*20}px`
+                        if(pile.name === 'ph')newCard.style.right = `${i*10 + a*10}px`
+                        else if(pile.name === 'pd') newCard.style.left = `${i*10 + a*10}px`
+                        else if(pile.name === 'ps') newCard.style.right = `${i*10+ a*10 + 250}px`
+                        else if(pile.name === 'pc') newCard.style.left = `${i*10 + a*10 + 250}px`
+                        topCardsEls[eleIdx].appendChild(newCard)
+                        console.log('working')
+                  
+                    }, 1000);
+    
+                    
+                }
+                
+            })
+    
+        }
     }else {
         msgFinEl.style.visibility = 'hidden'
         backgroundWinEl[0].style.visibility = 'hidden'
         winner = 0
     }
+
+
+    
 }
 
 function addEventHandleClick(piles){
