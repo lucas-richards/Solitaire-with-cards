@@ -16,7 +16,7 @@ As a user, I want to be able to...
 
 - click the main deck of cards and see the card on top
 - start a foundation with an ace
-- stack cards by dragging and dropping. 
+- stack cards. 
     - A card can only be stacked on a card that is a different color and one number higher
     - A stack of cards can only be stacked on a card that is a different color and one number higher to the bottom card of the pile.
 - display a message for invalid moves
