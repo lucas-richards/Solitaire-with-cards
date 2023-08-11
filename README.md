@@ -4,8 +4,7 @@
 Solitaire goes back to my childhood vacations, those rainy days at the beach house. This game simulates a solitaire with cards from the comfort of your home.
 
 ## Getting Started
-
-here goes the link to the game
+https://lucas-richards.github.io/Solitaire-with-cards/
 
 ## Technologies
 - HTML
@@ -13,10 +12,6 @@ here goes the link to the game
 - JavaScript
 
 ### User Stories
-
-MVP - Minimum Viable Product
-(The leaste amount of work required to release a prototype of our app)
-
 As a user, I want to be able to...
 
 - click the main deck of cards and see the card on top
