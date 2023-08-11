@@ -45,7 +45,6 @@ As a user, I want to be able to...
 
 
 ## UI WireFrame
-<!-- add an image to the readme -->
 ![layout wireframe](css/imgs/game1.png)
 ![layout wireframe](css/imgs/game2.png)
 ![layout wireframe](css/imgs/game3.png)
@@ -61,3 +60,6 @@ As a user, I want to be able to...
     - pile7: 6 cards facing down and 1 facing up
     - pile8: Main deck rest of the cards (52 - 26 = 24)
 - see the next card of the stack when I remove the one on top
+
+## Flow Chart
+![layout wireframe](css/imgs/flowchart.png)
