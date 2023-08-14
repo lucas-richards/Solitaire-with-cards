@@ -58,13 +58,13 @@ const deck = [
 
 const rules = [
     {name:'Objective',desc:' Move all cards to foundation piles, organized by suit and in ascending order from Ace to King.'},
-    {name:'rule 1',desc:' Move cards in descending order and alternating colors (red and black) onto each other in the tableau.'},
-    {name:'rule 2',desc:' Cards can be moved individually or in groups if they form a valid descending sequence.'},
-    {name:'rule 3',desc:' Top cards of tableau piles and the stock pile are available for play.'},
-    {name:'rule 4',desc:' A King or a group of cards with a King on top can be moved to an empty tableau pile.'},
-    {name:'rule 5',desc:' Start foundation piles with Aces.'},
-    {name:'rule 6',desc:' Build up each foundation pile by suit in ascending order (Ace, 2, 3, ..., King).'},
-    {name:'rule 7',desc:' Draw cards from the stock pile one at a time.'},
+    {name:'Rule 1',desc:' Move cards in descending order and alternating colors (red and black) onto each other in the tableau.'},
+    {name:'Rule 2',desc:' Cards can be moved individually or in groups if they form a valid descending sequence.'},
+    {name:'Rule 3',desc:' Top cards of tableau piles and the stock pile are available for play.'},
+    {name:'Rule 4',desc:' A King or a group of cards with a King on top can be moved to an empty tableau pile.'},
+    {name:'Rule 5',desc:' Start foundation piles with Aces.'},
+    {name:'Rule 6',desc:' Build up each foundation pile by suit in ascending order (Ace, 2, 3, ..., King).'},
+    {name:'Rule 7',desc:' Draw cards from the stock pile one at a time.'},
 ]
 
 
@@ -295,12 +295,12 @@ function renderBottom(){
 
 function handleClick(evt){
     //SHOW WINNER
-    // topPiles = [
-    //     {name:'ph',cards:[{name:'hK', flip:true}]},
-    //     {name:'pc',cards:[{name:'cK', flip:true}]},
-    //     {name:'pd',cards:[{name:'dK', flip:true}]},
-    //     {name:'ps',cards:[{name:'sK', flip:true}]},
-    // ]
+    topPiles = [
+        {name:'ph',cards:[{name:'hK', flip:true}]},
+        {name:'pc',cards:[{name:'cK', flip:true}]},
+        {name:'pd',cards:[{name:'dK', flip:true}]},
+        {name:'ps',cards:[{name:'sK', flip:true}]},
+    ]
 
     // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
@@ -494,31 +494,53 @@ function checkWinner(){
         msgFinEl.style.visibility = 'visible'
         backgroundWinEl[0].style.visibility = 'visible'
 
-        for(let a=1;a < 70; a+=10){
-            console.log(a)
-            topPiles.forEach((pile,eleIdx)=>{
-                for(let i=0;i < 50 ; i++){
-                    setTimeout(()=>{
-                        const newCard = document.createElement('div')
-                        newCard.classList.add('card','shadow','medium')
-                        newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
-                        newCard.style.position = 'absolute'
-                        newCard.style.top = `${i*20}px`
-                        if(pile.name === 'ph')newCard.style.right = `${i*10 + a*10}px`
-                        else if(pile.name === 'pd') newCard.style.left = `${i*10 + a*10}px`
-                        else if(pile.name === 'ps') newCard.style.right = `${i*10+ a*10 + 250}px`
-                        else if(pile.name === 'pc') newCard.style.left = `${i*10 + a*10 + 250}px`
-                        topCardsEls[eleIdx].appendChild(newCard)
-                        console.log('working')
-                  
-                    }, 1000);
-    
-                    
-                }
+        
+        let i = 1
+        let a =1
+        topPiles.forEach((pile,eleIdx)=>{
+            
+            setInterval(()=>{
+                const newCard = document.createElement('div')
+                newCard.classList.add('card','shadow','medium')
+                newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
+                newCard.style.position = 'absolute'
+                newCard.style.top = `${i*5 + 80}px`
+                if(pile.name === 'ph')newCard.style.right = `${i*1 + a*16}px`
+                else if(pile.name === 'pd') newCard.style.left = `${i*1 + a*12}px`
+                else if(pile.name === 'ps') newCard.style.right = `${i*1 + a*1 + 250}px`
+                else if(pile.name === 'pc') newCard.style.left = `${i*1 + a*1 + 250}px`
+                topCardsEls[eleIdx].appendChild(newCard)
+                console.log('working')
+                i++
                 
-            })
+            },100)
+            a+=10
+            
+        })
     
-        }
+        
+        
+        // setInterval(()=>{
+        //     let i = 0
+        //     let a = 0
+        //     let eleIdx = 0
+        //     let pile = topPiles[0]
+        //     const newCard = document.createElement('div')
+        //     newCard.classList.add('card','shadow','medium')
+        //     newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
+        //     newCard.style.position = 'absolute'
+        //     newCard.style.top = `${i*20}px`
+        //     if(pile.name === 'ph')newCard.style.right = `${i*10 + a*10}px`
+        //     else if(pile.name === 'pd') newCard.style.left = `${i*10 + a*10}px`
+        //     else if(pile.name === 'ps') newCard.style.right = `${i*10+ a*10 + 250}px`
+        //     else if(pile.name === 'pc') newCard.style.left = `${i*10 + a*10 + 250}px`
+        //     topCardsEls[eleIdx].appendChild(newCard)
+        //     console.log('working')
+        //     i++
+        //     a++
+        
+        // }, 200);
+
     }else {
         msgFinEl.style.visibility = 'hidden'
         backgroundWinEl[0].style.visibility = 'hidden'
