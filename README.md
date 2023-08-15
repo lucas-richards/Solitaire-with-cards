@@ -35,7 +35,7 @@ As a user, I want to be able to...
 - loose if it is impossible to make any other move
 - Option to choose an easy game (1 card) or hard game (3 cards) 
 - keep track of how many moves the player made in previous games
-- help button to give me a possible move
+- help button to give me a possible move.
 
 ## Overall design (look and feel) of the app
 
