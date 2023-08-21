@@ -517,8 +517,12 @@ function checkWinner(){
             a+=10
             
         })
+
+
+
+        
     
-        //important comment
+        
         
         // setInterval(()=>{
         //     let i = 0
