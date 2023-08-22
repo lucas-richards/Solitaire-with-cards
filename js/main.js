@@ -488,8 +488,9 @@ function checkWinner(){
         winner++
     })
     console.log('this is winner',winner)
+    // console.log('this is winner',winner)
 
-    //declare a winner
+    //declare a winner!
     if(winner === 4){
         msgFinEl.style.visibility = 'visible'
         backgroundWinEl[0].style.visibility = 'visible'
