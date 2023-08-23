@@ -488,7 +488,7 @@ function checkWinner(){
         winner++
     })
     console.log('this is winner',winner)
-    // console.log('this is winner',winner)
+    console.log('this is winner',winner)
 
     //declare a winner!
     if(winner === 4){
