@@ -244,6 +244,8 @@ function renderTop() {
             const newCard = document.createElement('div')
             newCard.classList.add('card','shadow','medium')
             newCard.classList.add( `${pile.cards[pile.cards.length-1].name}`)
+            newCard.setAttribute('id', `${pile.cards[pile.cards.length-1].name}`)
+            newCard.setAttribute('draggable', 'true');
             topCardsEls[eleIdx].appendChild(newCard)
         }
         
@@ -261,9 +263,11 @@ function renderMid(){
             const newCard = document.createElement('div')
             newCard.classList.add('card','shadow','medium')
             //if the card flip === true -> show card facing up
+            newCard.setAttribute('draggable', 'true');
             card.flip?
             newCard.classList.add( `${card.name}`)
             :newCard.classList.add('back-red')
+            newCard.setAttribute('id', `${card.name}`)
             midCardsEls[index].appendChild(newCard)
         })
     })
@@ -279,6 +283,7 @@ function renderBottom(){
     if(botPiles[0].cards.length !== 0 || botPiles[1].cards.length !== 0){
         const newCard = document.createElement('div')
         newCard.classList.add('card','shadow','medium','back-red')
+        newCard.setAttribute('draggable', 'true');
         botCardsEls[0].appendChild(newCard)
     }
 
@@ -287,6 +292,8 @@ function renderBottom(){
         const newCard = document.createElement('div')
         newCard.classList.add('card','shadow','medium')
         newCard.classList.add( `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
+        newCard.setAttribute('id', `${botPiles[1].cards[botPiles[1].cards.length - 1].name}`)
+        newCard.setAttribute('draggable', 'true');
         botCardsEls[1].appendChild(newCard)
     }
 
@@ -295,12 +302,7 @@ function renderBottom(){
 
 function handleClick(evt){
     //SHOW WINNER
-    topPiles = [
-        {name:'ph',cards:[{name:'hK', flip:true}]},
-        {name:'pc',cards:[{name:'cK', flip:true}]},
-        {name:'pd',cards:[{name:'dK', flip:true}]},
-        {name:'ps',cards:[{name:'sK', flip:true}]},
-    ]
+   
 
     // convert evt.target into array to get the card in the class
     if(evt.target.classList.contains('card')){
@@ -331,7 +333,8 @@ function handleClick(evt){
     //This is the first card clicked
     else if(clickedCardStr===null && evt.target.classList.contains('card')){
         evt.target.style.border = 'solid black'
-        clickedCardParentId = evt.currentTarget.id
+        console.log('clickedCardParentId',evt.currentTarget.id)
+        clickedCardParentId = evt.currentTarget.id //pile id ex: p0
         clickedCardStr = card
         clickedCardNum = convertCardToNumber(card)
 
@@ -432,6 +435,10 @@ function moveCards(clickedCardParentId,evtCurrentTargetId,card){
     let removedCards = []
     const topArray = ['ph','pc','pd','ps'] 
 
+    console.log('clickedCardParentId',clickedCardParentId)
+    console.log('evtCurrentTargetId',evtCurrentTargetId)
+    console.log('card',card)
+
     if(topArray.includes(clickedCardParentId)){
         removedCards = removeCards(topPiles,clickedCardParentId,card) 
 
@@ -519,11 +526,6 @@ function checkWinner(){
             
         })
 
-
-
-        
-    
-        
         
         // setInterval(()=>{
         //     let i = 0
@@ -561,6 +563,11 @@ function addEventHandleClick(piles){
         pile.addEventListener('click', handleClick)
     })
 }
+function addEventHandleDrag(piles){
+    piles.forEach((pile)=>{
+        pile.addEventListener('dragstart', handleClick)
+    })
+}
 
 function showRules(){
     if(infoCont.style.visibility === 'visible')infoCont.style.visibility = 'hidden'
@@ -586,6 +593,51 @@ addEventHandleClick(botCardsEls)
 tryAgainBtn.addEventListener('click', init)
 
 infoIcon.addEventListener('click',showRules)
+
+// Drag and drop
+
+function handleDragStart(evt) {
+    // let targetClasses = [...evt.target.classList]
+    // card = targetClasses[targetClasses.length-1]
+    // clickedCardEl = evt.target
+    // cardNum = convertCardToNumber(card)
+    evt.dataTransfer.setData("text/plain", evt.target.id);
+    console.log('this is the card dragged',evt.target.id)
+}
+
+function handleDragOver(event) {
+    event.preventDefault(); // Allow drop
+}
+
+function handleDrop(evt) {
+    evt.preventDefault();
+    
+    const draggedCardStr = evt.dataTransfer.getData("text/plain");
+    const draggedElement = (document.getElementById(draggedCardStr)).parentNode.id;
+    const pileId = evt.target.parentNode.id;
+    
+    console.log('this is draggedcardStr',draggedCardStr)
+    console.log('this is draggedElement',draggedElement)
+    console.log('this is the parent',pileId)
+    moveCards(
+        pileId //pile id ex: p0
+        ,draggedElement // element dropped
+        ,draggedCardStr) // card str ex: c0A
+    
+}
+
+
+// Add the drag-and-drop event listeners to your elements
+document.querySelectorAll('.card').forEach((card) => {
+    card.addEventListener("dragstart", handleDragStart);
+    card.addEventListener("dragover", handleDragOver);
+    card.addEventListener("drop", handleDrop);
+});
+
+
+
+
+
 
 
 
