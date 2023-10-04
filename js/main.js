@@ -623,6 +623,7 @@ function handleDrop(evt) {
         pileId //pile id ex: p0
         ,draggedElement // element dropped
         ,draggedCardStr) // card str ex: c0A
+        // ,draggedCardStr) // card str ex: c0A
     
 }
 
